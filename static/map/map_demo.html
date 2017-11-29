@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>map</title>
+    <style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    
+    body {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    
+    #btnGroup {
+        position: fixed;
+        z-index: 10;
+        top: 20px;
+    }
+    
+    #btnGroup button {
+        display: block;
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+    
+    #out-frame {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    @font-face {
+        font-family: 'VMapPublic';
+        src: url(./assets/VMapPublic.ttf);
+    }
+    
+    #map {
+        font-family: 'VMapPublic', serif;
+    }
+    
+    #map_loading {
+        position: absolute;
+        top: 35%;
+        left: 40%;
+        font-size: 20px;
+        font-family: "Microsoft YaHei";
+    }
+    /*必须加上这句！否则在初始化地图时，公共设施字体无法加载出来*/
+    </style>
+</head>
+
+<body>
+    <div id="out-frame">
+        <div id="map_loading">地图正在加载，请稍后&nbsp;&nbsp;<img src="./img/loading_gif.gif"></div>
+        <div id="map"></div>
+    </div>
+    <div id="btnGroup">
+        <button id="changefloor3">3楼</button>
+        <button id="changefloor2">2楼</button>
+        <button id="changefloor1">1楼</button>
+        <!-- <button id="getfloor">当前楼层</button> -->
+        <button id="zoomIn">放大</button>
+        <button id="zoomOut">缩小</button>
+        <!--         <button id="line">画线</button>
+        <button id="circle">画圆</button>
+        <button id="clear">清除</button>
+        <button id="enableMarkerClick">开启标记点击</button>
+        <button id="unableMarkerClick">关闭标记点击</button>
+        <button id="getScaleCtrl">显示比例尺</button>
+        <button id="removeScaleCtrl">去除比例尺</button>
+        <button id="enableMoveWithTap">开启中心移动</button>
+        <button id="unableMoveWithTap">关闭中心移动</button>
+        <button id="setZoomScale">设置缩放级别</button> -->
+    </div>
+    <script src="./js/zepto.min.js"></script>
+    <script src="./js/blockUI.js"></script>
+    <script src="./js/hammer.min.js"></script>
+    <script src="./js/slave.js"></script>
+    <script src="./js/VMap_origin.js"></script>
+    <script type="text/javascript">
+    window.onload = function() {
+        //全局配置
+        var serverUrl = "123.57.46.160:8080";
+        var client = 824;
+        var vkey = "FFE58998-B203-B44E-A95B-8CA2D6CBCD65";
+        var place = "E9F6A2DE-EADC-45AF-A42E-C7458A401339";
+
+
+
+        var mapDiv = document.querySelector("#map");
+        var map = new Vmap(mapDiv, place, "Floor3", {
+            fontColor: "blue",
+            publicColor: "green"
+        });
+
+
+
+
+        //获取初始信息
+        var infoText = $(window.parent.document).find("#p_unit_id").val();
+        var info = infoText == '' ? '' : JSON.parse(infoText);
+        //初始化打点 ，需要在map初始化完成后
+        var intervalId = setInterval(function() {
+            if (map.isLoaded()) {
+                $("#map_loading").hide();
+                if (info == '')
+                    return;
+                var postUrl = "http://" + serverUrl + "/vmap/spot!search?client=" + client + "&vkey=" + vkey + "&spot=" + info.unit_name + "&jsoncallback=?";
+                $.getJSON(postUrl,
+                    function(data) {
+                        if (data.success) {
+                            var res = data.rows;
+                            var unitId = info.unit_id;
+                            for (var item in res) {
+                                var curUnitId = res[item].unit_id;
+                                if (curUnitId == unitId) {
+                                    var obj = res[item];
+                                    //该接口返回的坐标需要乘10
+                                    doDot(obj.x * 10, obj.y * 10, true);
+                                    stopDot();
+                                    break;
+                                }
+                            }
+                        } else {
+                            alert("请求地图信息失败!");
+                        }
+                    });
+            } else {
+                return;
+            }
+        }, 2000);
+
+
+        function stopDot() {
+            clearInterval(intervalId);
+        }
+
+
+
+        map.onMapTap = function(obj) {
+            console.log("obj", obj);
+            if (obj.unit_name) {
+                var x = obj.x,
+                    y = obj.y;
+                doDot(x, y, false);
+                /*iframe子页面向父页面vue传值，聚焦是调用vue的监听，将值同步到vue的data中*/
+                var info = {
+                    unit_id: obj.unit_id,
+                    unit_name: obj.unit_name,
+                    place: obj.parent_unit_id
+                };
+                var infoText = JSON.stringify(info);
+                $(window.parent.document).find("#unit_id").val(infoText).focus().blur();
+            } else {
+                alert("无地点信息");
+            }
+        };
+
+        function doDot(x, y, isInit) {
+            map.removeOverLayForMall();
+            var delta = map.getDelta();
+            var point = new VPoint(x / delta, y / delta, map.getCurrentFloorId());
+            //偏移量针对不同图片确定
+            var offset;
+            if (isInit) {
+                offset = {
+                    left: 0,
+                    top: 0
+                };
+            } else {
+                offset = {
+                    left: -11,
+                    top: -16
+                };
+            }
+            var marker = new VMarker(point, "./img/LocatingPoint.gif", offset);
+            map.addOverlay(marker);
+        }
+
+        document.querySelector("#changefloor1").onclick = function() {
+            $("#map").hide();
+            $("#map_loading").show();
+            map.changeFloor("Floor1", function() {
+                $("#map_loading").hide();
+                $("#map").show()
+            });
+        };
+
+        document.querySelector("#changefloor2").onclick = function() {
+            $("#map").hide();
+            $("#map_loading").show();
+            map.changeFloor("Floor2", function() {
+                $("#map_loading").hide();
+                $("#map").show()
+            });
+        };
+
+        document.querySelector("#changefloor3").onclick = function() {
+            $("#map").hide();
+            $("#map_loading").show();
+            map.changeFloor("Floor3", function() {
+                $("#map_loading").hide();
+                $("#map").show()
+            });
+        };
+
+
+        //左侧功能键监听
+        document.querySelector("#zoomIn").onclick = map.zoomIn;
+        document.querySelector("#zoomOut").onclick = map.zoomOut;
+
+
+        // document.querySelector("#circle").onclick = function() {
+        //     //定义circle
+        //     var circle1 = new VCircle(p1, 3);
+        //     var circle2 = new VCircle(p2, 3);
+        //     var circle3 = new VCircle(p3, 3);
+        //     //加载到地图浮层
+        //     map.addOverlay(circle1);
+        //     map.addOverlay(circle2);
+        //     map.addOverlay(circle3);
+        // };
+
+        // document.querySelector("#line").onclick = function() {
+        //     //line所需的points数组
+        //     var points = [p1, p2, p3];
+        //     //定义line
+        //     var line = new VPolyline(points);
+        //     //加载line
+        //     map.addOverlay(line);
+        // };
+
+        // document.querySelector("#clear").onclick = map.clearOverlays;
+
+
+
+
+
+
+        // document.querySelector("#getfloor").onclick = function() {
+        //     alert(map.getCurrentFloorId());
+        // };
+
+        // document.querySelector("#getScaleCtrl").onclick = function() {
+        //     var map_scaleCtrl = map.getScaleCtrl();
+        //     $("body").append($(map_scaleCtrl));
+        //     $("#getScaleCtrl").attr("disabled", true);
+        // };
+
+        // document.querySelector("#removeScaleCtrl").onclick = function() {
+        //     map.removeScaleCtrl();
+        //     $("#getScaleCtrl").removeAttr("disabled");
+        // };
+
+        // document.querySelector("#enableMarkerClick").onclick = function() {
+        //     map.enableMarkerClick();
+        //     $("#enableMarkerClick").attr("disabled", true);
+        // };
+
+        // document.querySelector("#unableMarkerClick").onclick = function() {
+        //     map.unableMarkerClick();
+        //     $("#enableMarkerClick").removeAttr("disabled");
+        // };
+
+        // document.querySelector("#enableMoveWithTap").onclick = function() {
+        //     map.enableMoveWithTap();
+        // };
+
+        // document.querySelector("#unableMoveWithTap").onclick = function() {
+        //     map.unableMoveWithTap();
+        // };
+
+        // document.querySelector("#setZoomScale").onclick = function() {
+        //     map.setZoomScale(1.5);
+        // };
+    }
+    </script>
+</body>
+
+</html>
