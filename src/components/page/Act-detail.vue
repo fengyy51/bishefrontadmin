@@ -81,10 +81,12 @@
                     <quill-editor ref="myTextEditor" v-model="actForm.content" :config="editorOption" @change="onEditorChange($event)"></quill-editor>
                 </el-form-item>
                 <br/>
-                <!--<el-form-item prop="description" label="活动规则">-->
-                    <!--<el-input type="textarea"  id="designer_textarea" :autosize="{ minRows: 2, maxRows: 4}"   placeholder="请输入活动相关规则"  v-model="actForm.description">-->
-                    <!--</el-input>-->
-                <!--</el-form-item>-->
+                <el-form-item prop="description" label="活动规则">
+                    <span style="color: red">您在分段落换行时请添加&lt;br&nbsp;/&gt;符号</span>
+                    <el-input type="textarea"  id="designer_textarea" :autosize="{ minRows: 2, maxRows: 4}"   placeholder="请输入活动相关规则"  v-model="actForm.description">
+                    </el-input>
+                </el-form-item>
+                <br/>
                 <el-form-item class="submit_center_btn_form">
                     <el-button type="primary" @click="onSubmit" size="large" icon="edit">{{type_name}}</el-button>
                 </el-form-item>

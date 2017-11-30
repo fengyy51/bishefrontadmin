@@ -25,10 +25,9 @@
                 <el-form-item class="top_search">
                     <el-button type="success" @click="searchHandle">搜索</el-button>
                 </el-form-item>
-                <el-form-item class="">
-                    <el-button type="success" @click="export2Excel">导出</el-button>
-                </el-form-item>
             </el-form>
+                <el-button type="success" @click="export2Excel">导出</el-button>
+
         </div>
         <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
             <el-table-column type="index" width="100" >
@@ -36,6 +35,8 @@
             <el-table-column label="微信id" prop="openId">
             </el-table-column>
             <el-table-column label="验证码" prop="code">
+            </el-table-column>
+            <el-table-column label="报名信息" prop="regItem">
             </el-table-column>
             <el-table-column label="报名状态" prop="status">
                 <template scope="scope">
@@ -110,12 +111,13 @@ export default {
             this.getData();
         },
         methods: {
+//        导出excel
             export2Excel() {
                 require.ensure([], () => {
                     const { export_json_to_excel } = require('../../excel/Export2Excel');
                     const { blob }=require('../../excel/Blob');
-                    const tHeader = ['微信id','验证码','报名状态','是否签到'];
-                    const filterVal = ['openId','code','status','sign'];
+                    const tHeader = ['微信id','验证码','报名信息','报名状态','是否签到'];
+                    const filterVal = ['openId','code','regItem','status','sign'];
                     const list = this.tableData;
                     const data = this.formatJson(filterVal, list);
                     export_json_to_excel(tHeader, data, '列表excel');
@@ -124,6 +126,7 @@ export default {
             formatJson(filterVal, jsonData) {
                 return jsonData.map(v => filterVal.map(j => v[j]))
             },
+//       导出excel结束
             handleCurrentChange(val) {
                 this.cur_page = val;
                 this.getData();
