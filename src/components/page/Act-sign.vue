@@ -25,10 +25,13 @@
                 <el-form-item class="top_search">
                     <el-button type="success" @click="searchHandle">搜索</el-button>
                 </el-form-item>
+                <el-form-item class="">
+                    <el-button type="success" @click="export2Excel">导出</el-button>
+                </el-form-item>
             </el-form>
         </div>
         <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
-            <el-table-column type="index" width="100">
+            <el-table-column type="index" width="100" >
             </el-table-column>
             <el-table-column label="微信id" prop="openId">
             </el-table-column>
@@ -54,7 +57,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column label="是否签到">
+            <el-table-column label="是否签到" prop="sign">
                 <template scope="scope">
                     <div v-if="scope.row.sign == 0">
                         <el-button type="success" @click="handleSign(scope.row.openId)" class="sign_button">去签到</el-button>
@@ -107,6 +110,20 @@ export default {
             this.getData();
         },
         methods: {
+            export2Excel() {
+                require.ensure([], () => {
+                    const { export_json_to_excel } = require('../../excel/Export2Excel');
+                    const { blob }=require('../../excel/Blob');
+                    const tHeader = ['微信id','验证码','报名状态','是否签到'];
+                    const filterVal = ['openId','code','status','sign'];
+                    const list = this.tableData;
+                    const data = this.formatJson(filterVal, list);
+                    export_json_to_excel(tHeader, data, '列表excel');
+                })
+            },
+            formatJson(filterVal, jsonData) {
+                return jsonData.map(v => filterVal.map(j => v[j]))
+            },
             handleCurrentChange(val) {
                 this.cur_page = val;
                 this.getData();
