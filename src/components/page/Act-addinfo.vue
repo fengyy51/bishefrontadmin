@@ -48,11 +48,11 @@
                         <el-switch  on-text="是" off-text="否" v-model="form.ifneed"></el-switch>
                     </el-form-item>
                     <el-form-item v-if="form.dtype=='下拉'||form.dtype=='多选'||form.dtype=='单选'"
-                                  v-for="(option, index) in form.options"
-                    :label="'选项' + index"
-                    :key="option.key"
-                    :prop="'options.' + index + '.value'"
-                    :rules="{
+                                     v-for="(option, index) in form.options"
+                                     :label="'选项' + index"
+                                     :key="option.key"
+                                     :prop="'options.' + index + '.value'"
+                                     :rules="{
                     required: true, message: '选项不能为空', trigger: 'blur'
                     }">
                         <el-input v-model="option.value"  class="form_small"></el-input>

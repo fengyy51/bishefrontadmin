@@ -27,27 +27,33 @@
             <el-button type="success" @click="openMulImgModal">上传详情图</el-button>
         </div>
         <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
-            <el-table-column label="序号" prop="id">
-            </el-table-column>
-            <el-table-column label="设计师" prop="name">
-            </el-table-column>
-            <el-table-column label="推荐单位" prop="recUnit">
-            </el-table-column>
-            <el-table-column label="详情">
-                <template scope="scope">
-                    <el-button type="success" @click="handleDetail(scope.row.id)">查看</el-button>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作">
-                <template scope="scope">
-                    <div v-if="scope.row.isOk == 0">
-                        <el-button type="info" @click="handleReq(scope.row.id,1)">去通过</el-button>
-                    </div>
-                    <div v-else>
-                        <el-button :plain="true" type="info" @click="handleReq(scope.row.id,0)">取消通过</el-button>
-                    </div>
-                </template>
-            </el-table-column>
+            <template>
+                <el-table-column label="序号" prop="id">
+                </el-table-column>
+            </template>
+
+            <template v-for="item in regItem">
+                <el-table-column v-if="item.title" prop="item.title" :label="item.title" :formatter="formatter_items">
+                </el-table-column>
+            </template>
+            <template>
+                <el-table-column label="详情">
+                    <template scope="scope">
+                        <el-button type="success" @click="handleDetail(scope.row.id)">查看</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template scope="scope">
+                        <div v-if="scope.row.isOk == 0">
+                            <el-button type="info" @click="handleReq(scope.row.id,1)">去通过</el-button>
+                        </div>
+                        <div v-else>
+                            <el-button :plain="true" type="info" @click="handleReq(scope.row.id,0)">取消通过</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </template>
+
         </el-table>
         <div class="pagination">
             <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
@@ -144,13 +150,13 @@ export default {
             search_form: {
                 type: -1
             },
+            regItem:[],
             tableData: [],
             pageSum: 10,
             sum: 0,
             cur_page: 1,
             loading: false,
             approved_num: 0,
-            collectId: 1,
             loading: false,
             detail: {
                 name: '',
@@ -179,6 +185,9 @@ export default {
         'MultiImg': MultiImg
     },
     methods: {
+        formatter_items(row,column){
+            return row[column.label];
+        },
         openFirstImgModal() {
             this.firstImgForm.id = '';
             this.firstImgForm.url = '';
@@ -249,20 +258,43 @@ export default {
             this.getData();
         },
         getData() {
+            var collectId = this.$route.params.id;
             const self = this;
             self.$axios({
                     url: '/collect/list',
                     method: 'get',
                     params: {
                         type: self.search_form.type,
-                        collectId: self.collectId,
+                        collectId: collectId,
                         curPage: self.cur_page,
                         pageSum: self.pageSum
                     }
                 })
                 .then((res) => {
                     if (res != null) {
-                        self.tableData = res.data.list;
+                        var list=res.data.list;
+                        var data={};
+//                        console.log(list.length);
+
+                        for(var i=0;i<list.length;i++){
+                            data.id=list[i].id;
+                            data.isOk=list[i].isOk;
+                            self.tableData.push(data);
+                            var reglist=list[i].regItem.split(';');
+                            for(var j=1;j<=reglist.length;j++){
+                                var regarr=reglist[j].split('?');
+                                var regDetail=regarr[0];
+                                var regVal=regarr[1];
+                                data[regDetail]=regVal;
+                                var regstr={};
+                                regstr[regDetail]=regVal;
+                                regstr.title=regDetail;
+                                regstr.value=regVal;
+                                self.regItem[0]="";
+                                self.regItem[j]=regstr;
+                            }
+                        }
+//                        console.log(self.tableData);
                         self.sum = res.data.sum;
                         self.approved_num = res.data.approveSum;
                     }
@@ -275,12 +307,13 @@ export default {
             this.getData();
         },
         handleDetail(id) {
+            var collectId = this.$route.params.id;
             const self = this;
             self.$axios({
                     url: '/collect/detail',
                     method: 'get',
                     params: {
-                        collectId: self.collectId,
+                        collectId: collectId,
                         itemId: id
                     }
                 })
@@ -316,12 +349,13 @@ export default {
         },
         handleReq(id, type) {
             const self = this;
+            var collectId = this.$route.params.id;
             self.loading = true;
             self.$axios({
                     url: '/collect/handle',
                     method: 'post',
                     params: {
-                        collectId: self.collectId,
+                        collectId: collectId,
                         itemId: id,
                         approve: type
                     }

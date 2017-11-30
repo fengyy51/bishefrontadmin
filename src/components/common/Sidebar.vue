@@ -18,8 +18,8 @@
                 <el-menu-item index="/act-addinfo/0">
                     <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;&nbsp;自定义报名项
                 </el-menu-item>
-                <el-menu-item index="/collect"><i class="fa fa-file-image-o" aria-hidden="true"></i>&nbsp;&nbsp;作品征集</el-menu-item>
-                <el-menu-item index="/prize"><i class="fa fa-gift" aria-hidden="true"></i>&nbsp;&nbsp;抽奖情况</el-menu-item>
+                <el-menu-item index="/item-list"><i class="fa fa-file-image-o" aria-hidden="true"></i>&nbsp;&nbsp;投票活动</el-menu-item>
+                <el-menu-item index="/prize"><i class="fa fa-gift" aria-hidden="true"></i>&nbsp;&nbsp;抽奖活动</el-menu-item>
             </el-submenu>
             <!--             <el-menu-item index="/coupon">
                 <i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;&nbsp;优惠管理

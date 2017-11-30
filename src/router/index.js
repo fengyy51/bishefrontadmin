@@ -51,7 +51,10 @@ var router = new Router({
                 path: '/shop-list/detail/:id',
                 component: resolve => require(['../components/page/Shop-detail.vue'], resolve)
             },{
-                path: '/collect',
+                    path: '/item-list',
+                    component: resolve => require(['../components/page/Item-list.vue'], resolve)
+             },{
+                path: '/collect/:id',
                 component: resolve => require(['../components/page/Collect-list.vue'], resolve)
             },{
                 path: '/prize',
