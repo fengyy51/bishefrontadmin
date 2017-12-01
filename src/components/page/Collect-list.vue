@@ -27,20 +27,31 @@
             <el-button type="success" @click="openMulImgModal">上传详情图</el-button>
         </div>
         <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
-            <el-table-column label="序号" prop="id" :formatter="formatter_id">
-            </el-table-column>
-            <template v-for="(item,index) in regItem" >
-
-                <el-table-column   v-if="item.title" prop="item.title" :label="item.title" :formatter="formatter_items">
-
-                </el-table-column>
-            </template>
             <template>
-                <el-table-column label="图片详情">
+                <el-table-column label="序号" prop="id" :formatter="formatter_id">
+                </el-table-column>
+                <el-table-column label="图片详情" prop="detail">
                     <template scope="scope">
                         <el-button type="success" @click="handleDetail(scope.row.id)">查看</el-button>
                     </template>
                 </el-table-column>
+                <el-table-column label="操作">
+                    <template scope="scope">
+                        <div v-if="scope.row.isOk == 0">
+                            <el-button type="info" @click="handleReq(scope.row.id,1)">去通过</el-button>
+                        </div>
+                        <div v-else>
+                            <el-button :plain="true" type="info" @click="handleReq(scope.row.id,0)">取消通过</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+                <template v-for="(item,index) in regItem" >
+                    <el-table-column   v-if="item.title" prop="item.title" :label="item.title" :formatter="formatter_items">
+                    </el-table-column>
+                </template>
+
+            </template>
+
                 <!--<el-table-column label="操作">-->
                     <!--<template scope="scope">-->
                         <!--<div v-if="scope.row.isOk == 0">-->
@@ -51,7 +62,7 @@
                         <!--</div>-->
                     <!--</template>-->
                 <!--</el-table-column>-->
-            </template>
+
 
         </el-table>
         <div class="pagination">
@@ -102,32 +113,17 @@
                 <i class="el-icon-close" @click="closeModal"></i>
             </div>
             <div class="modal-form">
-                <el-form label-width="90px" :inline="true">
-                    <el-form-item label="设计师">
-                        {{detail.name}}
-                    </el-form-item>
-                    <el-form-item label="推荐单位">
-                        {{detail.recUnit}}
-                    </el-form-item>
-                    <el-form-item label="手机号">
-                        {{detail.mobile}}
-                    </el-form-item>
-                    <el-form-item label="品牌名">
-                        {{detail.brandName}}
-                    </el-form-item>
-                </el-form>
                 <el-form label-width="90px">
                     <el-form-item label="作品集">
                         <div>
                             <el-tag type="gray">点击图片查看大图</el-tag>
                         </div>
                         <br/>
-                        <div v-for="item in detail.productImgUrlList" class="detail_img_list_div">
-                            <img :src="item" class="image detail_img_div" @click="handleImgPreview(item)">
+                        <div v-for="item in detail.imgList" class="detail_img_list_div ">
+                            <span class="green"> {{item.type}}</span>
+                            <img :src="item.src" :title="item.type" class="image detail_img_div" @click="handleImgPreview(item.src)">
+
                         </div>
-                    </el-form-item>
-                    <el-form-item label="介绍">
-                        <p>{{detail.intro}}</p>
                     </el-form-item>
                 </el-form>
             </div>
@@ -162,7 +158,7 @@ export default {
                 recUnit: '',
                 mobile: '',
                 brandName: '',
-                productImgUrlList: [],
+                imgList: [],
                 intro: ''
             },
             firstImgForm: {
@@ -188,6 +184,9 @@ export default {
             return row["id"];
         },
         formatter_items(row,column){
+            if(row[column.label].indexOf('http')>-1){
+                localStorage.setItem(column.label,column.label);
+            }
             return row[column.label];
         },
         openFirstImgModal() {
@@ -302,7 +301,7 @@ export default {
                             data.approved_num = res.data.approveSum;
                             self.tableData.push(data);
                         }
-                        console.log(self.tableData);
+//                        console.log(self.tableData);
 
                     }
                 })
@@ -326,21 +325,19 @@ export default {
                 })
                 .then((res) => {
                     if (res != null) {
-                        let data = res.data;
-                        self.detail.name = data.name;
-                        self.detail.recUnit = data.recUnit;
-                        self.detail.mobile = data.mobile;
-                        self.detail.brandName = data.brandName;
-                        let _urls = data.productImgUrls.split('@@@');
-                        console.log(_urls);
-                        let _temp = [];
-                        for (let i in _urls) {
-                            if (_urls[i] != '')
-                                _temp.push(_urls[i]);
+                        let data = res.data.regItem.split(';');
+                        for(let i in data){
+                            let itemtitle=data[i].split('?')[0];
+                            let itemval=data[i].split('?')[1];
+                            if(localStorage.getItem(itemtitle)==itemtitle){
+                                let _tems=[];
+                                let _urls=itemval.split('&');
+                                for(let i in _urls){
+                                    _tems.push({type:itemtitle,src:_urls[i]});
+                                }
+                                self.detail.imgList=_tems;
+                            }
                         }
-                        console.log(_temp);
-                        self.detail.productImgUrlList = _temp;
-                        self.detail.intro = data.intro;
                         self.$modal.show('collect-modal');
                     }
                 })
@@ -414,16 +411,26 @@ export default {
     width: 100px !important;
     height: 100px;
 }
-
+.green{
+    color: #04be02;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .detail_img_div {
     width: 150px;
     height: 120px;
     margin-top: 5px;
+    display: inline;
 }
 
 .detail_img_list_div {
-    display: inline;
     margin-right: 10px;
+    margin-bottom: 10px;
+    width: 150px;
+    height: 155px;
+    float: left;
+    border: 1px solid #999;
 }
 
 .modal_close_btn {
