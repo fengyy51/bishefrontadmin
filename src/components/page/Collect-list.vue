@@ -6,29 +6,59 @@
                     <div class="collect_top_num_div">
                         <p class="collect_top_p">审核通过&nbsp;&nbsp;</p>
                         <el-tag type="danger" class="collect_top_tag">{{approved_num}}</el-tag>
+                        <el-tag class="collect_top_tag">共{{sum}}个用户</el-tag>
                     </div>
+                    <template>
+                        <div class="block">
+                            <span class="demonstration">&nbsp;&nbsp;投票活动</span>
+                            <el-date-picker
+                                v-model="value4"
+                                type="datetimerange"
+                                :picker-options="pickerOptions2"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                align="right">
+                            </el-date-picker>
+                        </div>
+                    </template>
+
                 </el-form-item>
                 <el-form-item class="top_search">
-                    <el-radio-group v-model="search_form.type">
-                        <el-radio class="radio" :label="-1">全部</el-radio>
-                        <el-radio class="radio" :label="1">已审核</el-radio>
-                        <el-radio class="radio" :label="0">未审核</el-radio>
-                    </el-radio-group>
+                        <el-form-item class="top_search">
+                            <el-input v-model="search_form.openId" class="search_input" placeholder="搜索微信id"></el-input>
+                        </el-form-item>
+                        <el-form-item class="top_search">
+                            <el-radio-group v-model="search_form.type">
+                                <el-radio class="radio" :label="-1">全部</el-radio>
+                                <el-radio class="radio" :label="1">已审核</el-radio>
+                                <el-radio class="radio" :label="0">未审核</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+
                 </el-form-item>
                 <el-form-item class="top_search">
                     <el-button type="success" @click="searchHandle">搜索</el-button>
                 </el-form-item>
             </el-form>
+
+
         </div>
-        <div class="top-btn">
-            <el-button type="primary" @click="openFirstImgModal">上传首屏展示图</el-button>
+        <div class="top-btn top-btn-left">
+
+            <!--<el-button type="primary" @click="openFirstImgModal">上传首屏展示图</el-button>-->
         </div>
         <div class="top-btn top-btn-right">
-            <el-button type="success" @click="openMulImgModal">上传详情图</el-button>
+            <!--<el-button type="success" @click="openMulImgModal">上传详情图</el-button>-->
         </div>
         <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
             <template>
-                <el-table-column label="序号" prop="id" :formatter="formatter_id">
+                <!--index为自增序号，id为活动中的id为数据库中保存的，此程序中保留id，仅不显示-->
+                <el-table-column type="index" width="100">
+                </el-table-column>
+                <!--<el-table-column label="序号" prop="id" :formatter="formatter_id">-->
+                <!--</el-table-column>-->
+                <el-table-column label="微信id" prop="openId">
                 </el-table-column>
                 <el-table-column label="图片详情" prop="detail">
                     <template scope="scope">
@@ -143,6 +173,7 @@ export default {
     data() {
         return {
             search_form: {
+                openId:'',
                 type: -1
             },
             regItem:[],
@@ -154,12 +185,7 @@ export default {
             approved_num: 0,
             loading: false,
             detail: {
-                name: '',
-                recUnit: '',
-                mobile: '',
-                brandName: '',
-                imgList: [],
-                intro: ''
+                imgList: []
             },
             firstImgForm: {
                 id: '',
@@ -169,7 +195,35 @@ export default {
                 id: '',
                 urls: ''
             },
-            imgUploadUrl: uploadImgUrl
+            imgUploadUrl: uploadImgUrl,
+            pickerOptions2: {
+                shortcuts: [{
+                    text: '最近一周',
+                    onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近一个月',
+                    onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                        picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近三个月',
+                    onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                        picker.$emit('pick', [start, end]);
+                    }
+                }]
+            },
+            value4: ''
         }
     },
     mounted() {
@@ -265,6 +319,7 @@ export default {
                     url: '/collect/list',
                     method: 'get',
                     params: {
+                        openId:self.search_form.openId,
                         type: self.search_form.type,
                         collectId: collectId,
                         curPage: self.cur_page,
@@ -274,15 +329,17 @@ export default {
                 .then((res) => {
                     if (res != null) {
                         var list=res.data.list;
+                        self.tableData=[];
                         for(var i=0;i<list.length;i++){
                             var data={};
                             data.id=list[i].id;
                             data.isOk=list[i].isOk;
+                            data.openId=list[i].openId;
 //                            console.log(self.regItem);
                             var reglist=list[i].regItem.split(';');
                             for(var j=0;j<=reglist.length;j++){
                                 if(reglist[j]!=undefined){
-                                    console.log(reglist[j]);
+//                                    console.log(reglist[j]);
                                     var regarr=reglist[j].split('?');
                                     var regDetail=regarr[0];
                                     var regVal=regarr[1];
@@ -297,11 +354,11 @@ export default {
                                 }
 
                             }
-                            data.sum = res.data.sum;
-                            data.approved_num = res.data.approveSum;
                             self.tableData.push(data);
                         }
 //                        console.log(self.tableData);
+                        self.sum = res.data.sum;
+                        self.approved_num = res.data.approveSum;
 
                     }
                 })
@@ -446,6 +503,9 @@ export default {
 
 .modal-form {
     margin-top: 40px;
+}
+.top-btn-left{
+    float: left;
 }
 
 .top-btn-right {

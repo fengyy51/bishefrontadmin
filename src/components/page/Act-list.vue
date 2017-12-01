@@ -25,6 +25,7 @@
             </el-form>
         </div>
         <!--<div class="top-btn">-->
+
             <!--<el-button type="primary" @click="linkToOtherUrl('0','/act-list/detail/')">添加</el-button>-->
         <!--</div>-->
         <el-table :data="tableData" border style="width: 100%">
