@@ -28,6 +28,17 @@ td {
 .cell {
     word-break: normal !important;
 }
+/*表格大小*/
+.el-table th{
+    height: 20px!important;
+}
+.el-table .cell{
+    line-height: 20px!important;
+}
+.el-table .cell,.el-table th>div{
+    padding: 0px !important;
+}
+/*表格大小结束*/
 
 .top-btn {
     float: right;

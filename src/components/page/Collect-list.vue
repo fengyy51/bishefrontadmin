@@ -1,5 +1,54 @@
 <template>
     <div>
+<!--投票活动模态框-->
+        <modal name="vote-modal" transition="pop-out" :height="480" :resizable="true" :pivotY="0.2">
+            <div class="modal_close_btn">
+                <i class="el-icon-close" @click="closeVoteModal"></i>
+            </div>
+            <div class="modal-form">
+                <el-form ref="vote_form" :model="voteForm"  label-width="80px" >
+                    <el-form-item label="选择时间范围">
+                        <el-date-picker
+                            reuired
+                            v-model="voteForm.votetime"
+                            type="datetimerange"
+                            :picker-options="pickerOptions2"
+                            placeholder="选择时间范围">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="每次投票作品数">
+                        <el-input-number v-model="voteForm.pro_num"  required class="form_small"></el-input-number>
+                    </el-form-item>
+                    <el-form-item label="每天投票次数上限">
+                        <el-input-number v-model="voteForm.vote_num"  class="form_small"></el-input-number>
+                    </el-form-item>
+                    <el-form-item label="分享是否增加次数">
+                        <el-switch
+                            v-model="voteForm.share_num"
+                            on-color="#13ce66"
+                            off-color="#ff4949">
+                        </el-switch>
+                    </el-form-item>
+                    <el-form-item label="投票活动规则说明">
+                        <el-input
+                            class="form_small"
+                            id="votedecoration"
+                            type="textarea"
+                            :rows="2"
+                            :autosize="true"
+                            placeholder="请输入投票规则说明"
+                            v-model="voteForm.votedecoration">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item class="modal-btn-group">
+                        <el-button type="primary" @click="onVoteSubmit">发起投票</el-button>
+                        <el-button @click="closeVoteModal">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </modal>
+<!--投票活动模态框结束-->
+
         <div class="search_form">
             <el-form ref="search_form" :model="search_form">
                 <el-form-item>
@@ -8,21 +57,6 @@
                         <el-tag type="danger" class="collect_top_tag">{{approved_num}}</el-tag>
                         <el-tag class="collect_top_tag">共{{sum}}个用户</el-tag>
                     </div>
-                    <template>
-                        <div class="block">
-                            <span class="demonstration">&nbsp;&nbsp;投票活动</span>
-                            <el-date-picker
-                                v-model="value4"
-                                type="datetimerange"
-                                :picker-options="pickerOptions2"
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
-                                align="right">
-                            </el-date-picker>
-                        </div>
-                    </template>
-
                 </el-form-item>
                 <el-form-item class="top_search">
                         <el-form-item class="top_search">
@@ -42,10 +76,9 @@
                 </el-form-item>
             </el-form>
 
-
         </div>
         <div class="top-btn top-btn-left">
-
+            <el-button type="primary" @click="openVoteModal">发起投票</el-button>
             <!--<el-button type="primary" @click="openFirstImgModal">上传首屏展示图</el-button>-->
         </div>
         <div class="top-btn top-btn-right">
@@ -79,21 +112,7 @@
                     <el-table-column   v-if="item.title" prop="item.title" :label="item.title" :formatter="formatter_items">
                     </el-table-column>
                 </template>
-
             </template>
-
-                <!--<el-table-column label="操作">-->
-                    <!--<template scope="scope">-->
-                        <!--<div v-if="scope.row.isOk == 0">-->
-                            <!--<el-button type="info" @click="handleReq(scope.row.id,1)">去通过</el-button>-->
-                        <!--</div>-->
-                        <!--<div v-else>-->
-                            <!--<el-button :plain="true" type="info" @click="handleReq(scope.row.id,0)">取消通过</el-button>-->
-                        <!--</div>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-
-
         </el-table>
         <div class="pagination">
             <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
@@ -174,7 +193,8 @@ export default {
         return {
             search_form: {
                 openId:'',
-                type: -1
+                type: -1,
+
             },
             regItem:[],
             tableData: [],
@@ -223,7 +243,14 @@ export default {
                     }
                 }]
             },
-            value4: ''
+           voteForm: {
+               votetime: '',
+               pro_num: 1,
+               vote_num: 1,
+               share_num: true,
+               votedecoration: '',
+           }
+
         }
     },
     mounted() {
@@ -242,6 +269,18 @@ export default {
                 localStorage.setItem(column.label,column.label);
             }
             return row[column.label];
+        },
+        openVoteModal(){
+            this.votetime='';
+            this.pro_num=1;
+            this.vote_num=1;
+            this.share_num=true;
+            this.votedecoration='';
+            this.$modal.show('vote-modal');
+
+        },
+        closeVoteModal(){
+            this.$modal.hide('vote-modal');
         },
         openFirstImgModal() {
             this.firstImgForm.id = '';
@@ -446,6 +485,10 @@ export default {
 .search_input {
     width: 150px!important;
 }
+#votedecoration{
+    width: 500px!important;
+    height: 40px!important;
+}
 
 .sign_tag {
     font-size: 14px;
@@ -454,7 +497,9 @@ export default {
 .sign_button {
     padding: 3px 5px;
 }
-
+.collect_top_vote_div{
+    font-size: 13px;
+}
 .collect_top_num_div {
     display: inline;
     padding-top: 100px;
@@ -462,6 +507,7 @@ export default {
 
 .collect_top_p {
     display: inline;
+    color: #04be02;
 }
 
 .brand_logo_table {
