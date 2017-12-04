@@ -1,35 +1,37 @@
 <template>
     <div>
 <!--投票活动模态框-->
-        <modal name="vote-modal" transition="pop-out" :height="480" :resizable="true" :pivotY="0.2">
+        <modal name="vote-modal" transition="pop-out" :height="550" :resizable="true" :pivotY="0.2">
             <div class="modal_close_btn">
                 <i class="el-icon-close" @click="closeVoteModal"></i>
             </div>
             <div class="modal-form">
-                <el-form ref="vote_form" :model="voteForm"  label-width="80px" >
-                    <el-form-item label="选择时间范围">
-                        <el-date-picker
-                            reuired
-                            v-model="voteForm.votetime"
-                            type="datetimerange"
-                            :picker-options="pickerOptions2"
-                            placeholder="选择时间范围">
+                <el-form ref="voteForm" :model="voteForm" :rules="rules" label-width="80px" >
+                    <el-form-item label="起始时间" prop="begin">
+                        <el-date-picker v-model="tempBegin" type="datetime" placeholder="选择日期时间">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="每次投票作品数">
-                        <el-input-number v-model="voteForm.pro_num"  required class="form_small"></el-input-number>
+                    <br/>
+                    <el-form-item label="结束时间" prop="end">
+                        <el-date-picker v-model="tempEnd" type="datetime" placeholder="选择日期时间">
+                        </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="每天投票次数上限">
-                        <el-input-number v-model="voteForm.vote_num"  class="form_small"></el-input-number>
+                    <br/>
+                    <el-form-item label="每次投票作品数" prop="pro_num">
+                        <el-input v-model="voteForm.pro_num"   class="form_small"></el-input>
                     </el-form-item>
-                    <el-form-item label="分享是否增加次数">
+                    <el-form-item label="每天投票次数上限" prop="vote_num">
+                        <el-input v-model="voteForm.vote_num"  class="form_small"></el-input>
+                    </el-form-item>
+                    <el-form-item label="分享是否增加次数" prop="share_num">
                         <el-switch
                             v-model="voteForm.share_num"
+                            on-text="是" off-text="否"
                             on-color="#13ce66"
                             off-color="#ff4949">
                         </el-switch>
                     </el-form-item>
-                    <el-form-item label="投票活动规则说明">
+                    <el-form-item label="投票活动规则说明" prop="votedecoration">
                         <el-input
                             class="form_small"
                             id="votedecoration"
@@ -181,6 +183,10 @@
 </template>
 <script>
 import {
+    TransDetailDateToString,
+    TransDetailStringToDate
+} from '../../util/date-helper.js';
+import {
     MessageBox
 } from 'element-ui';
 import SingleImg from '../common/SingleImg.vue';
@@ -194,7 +200,6 @@ export default {
             search_form: {
                 openId:'',
                 type: -1,
-
             },
             regItem:[],
             tableData: [],
@@ -243,24 +248,73 @@ export default {
                     }
                 }]
             },
+            tempBegin: '',
+            tempEnd: '',
            voteForm: {
-               votetime: '',
-               pro_num: 1,
-               vote_num: 1,
+               begin:'',
+               end:'',
+               pro_num: '',
+               vote_num: '',
                share_num: true,
                votedecoration: '',
-           }
+           },
+            rules: {
+                begin: [{
+                    required: true,
+                    message: '请选择起始日期',
+                    trigger: 'blur'
+                }],
+                end: [{
+                    required: true,
+                    message: '请选择结束日期',
+                    trigger: 'blur'
+                }],
+                pro_num: [{
+                    required: true,
+                    message: '请设定每次投票作品数',
+                    trigger: 'blur'
+                }],
+                vote_num:[{
+                    required: true,
+                    message: '请设定每天投票次数上限',
+                    trigger: 'blur'
+                }],
+                votedecoration:[{
+                    required:true,
+                    message:'请填写投票规则',
+                    trigger:'blur'
+                }]
+            }
 
         }
     },
+
     mounted() {
+
         this.getData();
+    },
+    watch: {
+        tempBegin: function(val) {
+            this.voteForm.begin = TransDetailDateToString(val);
+        },
+        tempEnd: function(val) {
+
+            this.voteForm.end = TransDetailDateToString(val);
+        },
     },
     components: {
         'SingleImg': SingleImg,
         'MultiImg': MultiImg
     },
     methods: {
+        resetForm(){
+            this.begin='';
+            this.end='';
+            this.pro_num='';
+            this.vote_num='';
+            this.share_num=true;
+            this.votedecoration='';
+        },
         formatter_id(row,column){
             return row["id"];
         },
@@ -271,16 +325,47 @@ export default {
             return row[column.label];
         },
         openVoteModal(){
-            this.votetime='';
-            this.pro_num=1;
-            this.vote_num=1;
-            this.share_num=true;
-            this.votedecoration='';
+
+//            this.resetForm();
             this.$modal.show('vote-modal');
 
         },
         closeVoteModal(){
             this.$modal.hide('vote-modal');
+        },
+        onVoteSubmit(){
+            var actId = this.$route.params.id;
+            const self=this;
+            self.$refs["voteForm"].validate((valid) => {
+                if (valid) {
+                    if(self.voteForm.begin>self.voteForm.end){
+                        this.$message.error("请填写正确的活动起止时间!");
+                        return;
+                    }
+                    self.$axios({
+                        url:'/collect/post-vote',
+                        method:'post',
+                        params:{
+                            actId:actId,
+                            begin:self.voteForm.begin,
+                            end:self.voteForm.end,
+                            proNum:parseInt(self.voteForm.pro_num),
+                            voteNum:parseInt(self.voteForm.vote_num),
+                            shareNum:self.voteForm.share_num,
+                            voteDecoration:self.voteForm.votedecoration,
+                            proApproved:parseInt(self.approved_num),
+
+                        }
+                    })
+                        .then((res) => {
+                            if (res != null && res.data.result)
+                                self.$message('发起成功!');
+                            else
+                                self.$message.error("发起失败！");
+                            self.$modal.hide('vote-modal');
+                        })
+                }
+            })
         },
         openFirstImgModal() {
             this.firstImgForm.id = '';
@@ -486,7 +571,7 @@ export default {
     width: 150px!important;
 }
 #votedecoration{
-    width: 500px!important;
+    width: 450px!important;
     height: 40px!important;
 }
 

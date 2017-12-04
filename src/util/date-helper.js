@@ -25,7 +25,6 @@ function addZero(val) {
     return val < 10 ? "0" + val : val;
 }
 
-
 export function TransDetailDateToString(now) {
     if (typeof now === 'string')
         return now;
@@ -42,7 +41,6 @@ export function TransDetailDateToString(now) {
     } else
         return '';
 }
-
 export function TransDetailStringToDate(now) {
     if (now == null)
         return;
