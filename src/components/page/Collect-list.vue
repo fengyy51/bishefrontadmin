@@ -1,12 +1,15 @@
 <template>
     <div>
 <!--投票活动模态框-->
-        <modal name="vote-modal" transition="pop-out" :height="550" :resizable="true" :pivotY="0.2">
+        <modal name="vote-modal" transition="pop-out" :height="600" :resizable="true" :pivotY="0.2">
             <div class="modal_close_btn">
                 <i class="el-icon-close" @click="closeVoteModal"></i>
             </div>
             <div class="modal-form">
                 <el-form ref="voteForm" :model="voteForm" :rules="rules" label-width="80px" >
+                    <el-form-item label="活动名称" prop="act_name">
+                        <el-input v-model="voteForm.act_name"  class="form_middle"></el-input>
+                    </el-form-item>
                     <el-form-item label="起始时间" prop="begin">
                         <el-date-picker v-model="tempBegin" type="datetime" placeholder="选择日期时间">
                         </el-date-picker>
@@ -251,6 +254,7 @@ export default {
             tempBegin: '',
             tempEnd: '',
            voteForm: {
+               act_name:'',
                begin:'',
                end:'',
                pro_num: '',
@@ -259,6 +263,11 @@ export default {
                votedecoration: '',
            },
             rules: {
+                act_name:[{
+                    required:true,
+                    message:'请填写活动名称',
+                    trigger:'blur'
+                }],
                 begin: [{
                     required: true,
                     message: '请选择起始日期',
@@ -290,7 +299,6 @@ export default {
     },
 
     mounted() {
-
         this.getData();
     },
     watch: {
@@ -325,7 +333,6 @@ export default {
             return row[column.label];
         },
         openVoteModal(){
-
 //            this.resetForm();
             this.$modal.show('vote-modal');
 
@@ -347,6 +354,7 @@ export default {
                         method:'post',
                         params:{
                             actId:actId,
+                            actName:self.voteForm.act_name,
                             begin:self.voteForm.begin,
                             end:self.voteForm.end,
                             proNum:parseInt(self.voteForm.pro_num),
