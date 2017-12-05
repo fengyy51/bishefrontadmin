@@ -53,6 +53,27 @@
             </div>
         </modal>
 <!--投票活动模态框结束-->
+        <!--投票页面链接模态框-->
+        <modal name="vote-link-modal" transition="pop-out" :height="600" :pivotY="0.2">
+            <div class="modal_close_btn">
+                <i class="el-icon-close" @click="closeVoteLinkModal"></i>
+            </div>
+            <div class="modal-form">
+                <div class="vote-link">
+                    二维码/微信链接地址
+                </div>
+                <div class="vote-link" style="text-align: center" >
+                    <img src="../../../static/img/votelink.png" >
+                    <div id="vote-link"></div>
+                </div>
+
+                <div class="modal-btn-group">
+                    <el-button @click="closeVoteLinkModal">关闭</el-button>
+                </div>
+            </div>
+
+        </modal>
+        <!--投票页面链接模态框结束-->
 
         <div class="search_form">
             <el-form ref="search_form" :model="search_form">
@@ -84,6 +105,7 @@
         </div>
         <div class="top-btn top-btn-left">
             <el-button type="primary" @click="openVoteModal">发起投票</el-button>
+            <el-button type="danger" @click="openVoteLinkModal">投票页面链接</el-button>
             <!--<el-button type="primary" @click="openFirstImgModal">上传首屏展示图</el-button>-->
         </div>
         <div class="top-btn top-btn-right">
@@ -315,6 +337,10 @@ export default {
         'MultiImg': MultiImg
     },
     methods: {
+        linkToOtherUrl(){
+            var id=this.$route.params.id;
+            window.location.href="http://localhost:63342/fe-frontOfBinwang/dist/goods/page/listWork.html?_ijt=l4ekkb7lmq13skv9jsejkpgqhh&id="+id;
+        },
         resetForm(){
             this.begin='';
             this.end='';
@@ -332,10 +358,10 @@ export default {
             }
             return row[column.label];
         },
+//       发起投票模态框开始
         openVoteModal(){
 //            this.resetForm();
             this.$modal.show('vote-modal');
-
         },
         closeVoteModal(){
             this.$modal.hide('vote-modal');
@@ -375,6 +401,19 @@ export default {
                 }
             })
         },
+        //       发起投票模态框结束
+//       投票页面链接模态框开始
+        openVoteLinkModal(){
+            this.$modal.show('vote-link-modal');
+            setTimeout(function () {
+                var id=localStorage.getItem("id");
+                document.getElementById("vote-link").innerHTML='http://localhost:63342/fe-frontOfBinwang/dist/goods/page/listWork.html?_ijt=l4ekkb7lmq13skv9jsejkpgqhh&id='+id;
+            },100)
+        },
+        closeVoteLinkModal(){
+            this.$modal.hide('vote-link-modal');
+        },
+        //       投票页面链接模态框结束
         openFirstImgModal() {
             this.firstImgForm.id = '';
             this.firstImgForm.url = '';
@@ -446,6 +485,7 @@ export default {
         },
         getData() {
             var collectId = this.$route.params.id;
+            localStorage.setItem("id",collectId);
             const self = this;
             self.$axios({
                     url: '/collect/list',
@@ -602,7 +642,10 @@ export default {
     display: inline;
     color: #04be02;
 }
-
+.vote-link{
+    padding:10px 0 20px 0;
+    border-bottom:1px solid #bbbbbb ;
+}
 .brand_logo_table {
     width: 100px !important;
     height: 100px;
