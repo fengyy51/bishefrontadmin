@@ -10,6 +10,13 @@
                     <el-form-item label="活动名称" prop="act_name">
                         <el-input v-model="voteForm.act_name"  class="form_middle"></el-input>
                     </el-form-item>
+                    <!--<el-form-item label="页面展示项" prop="type">-->
+                        <!--<el-checkbox-group v-model="voteForm.type">-->
+                            <!--<template v-for="(item,index)in voteItem">-->
+                                <!--<el-checkbox label="item.title" prop="item.title" name="type"></el-checkbox>-->
+                            <!--</template>-->
+                        <!--</el-checkbox-group>-->
+                    <!--</el-form-item>-->
                     <el-form-item label="起始时间" prop="begin">
                         <el-date-picker v-model="tempBegin" type="datetime" placeholder="选择日期时间">
                         </el-date-picker>
