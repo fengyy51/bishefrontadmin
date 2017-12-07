@@ -42,6 +42,7 @@
                         </el-switch>
                     </el-form-item>
                     <el-form-item label="投票活动规则说明" prop="votedecoration">
+                        <span style="color: red">您在分段落换行时请添加&lt;br&nbsp;/&gt;符号</span>
                         <el-input
                             class="form_small"
                             id="votedecoration"

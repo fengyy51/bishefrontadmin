@@ -54,8 +54,8 @@
       <file leaf-file-name="Collect-list.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/page/Collect-list.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="18" column="42" lean-forward="false" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
+            <state relative-caret-position="180">
+              <caret line="44" column="86" lean-forward="false" selection-start-line="44" selection-start-column="86" selection-end-line="44" selection-end-column="86" />
               <folding>
                 <element signature="n#div#0;n#modal#0;n#div#0;n#template#0;n#!!top" expanded="false" />
                 <element signature="n#modal#1;n#div#0;n#template#0;n#!!top" expanded="false" />
@@ -65,20 +65,20 @@
                 <element signature="n#modal#2;n#div#0;n#template#0;n#!!top" expanded="false" />
                 <element signature="n#modal#3;n#div#0;n#template#0;n#!!top" expanded="false" />
                 <element signature="n#modal#4;n#div#0;n#template#0;n#!!top" expanded="false" />
-                <element signature="e#10826#10927#0" expanded="true" />
-                <element signature="e#11798#12901#0" expanded="false" />
-                <element signature="e#14506#14574#0" expanded="false" />
-                <element signature="e#15060#15101#0" expanded="false" />
-                <element signature="e#15138#15320#0" expanded="false" />
-                <element signature="e#15556#17039#0" expanded="false" />
-                <element signature="e#17608#17747#0" expanded="false" />
-                <element signature="e#17778#17838#0" expanded="false" />
-                <element signature="e#17868#17920#0" expanded="false" />
-                <element signature="e#17948#18091#0" expanded="false" />
-                <element signature="e#18122#18176#0" expanded="false" />
-                <element signature="e#18206#18988#0" expanded="false" />
-                <element signature="e#19020#19081#0" expanded="false" />
-                <element signature="e#19110#19789#0" expanded="false" />
+                <element signature="e#10913#11014#0" expanded="true" />
+                <element signature="e#11885#12988#0" expanded="false" />
+                <element signature="e#14593#14661#0" expanded="false" />
+                <element signature="e#15147#15188#0" expanded="false" />
+                <element signature="e#15225#15407#0" expanded="false" />
+                <element signature="e#15643#17126#0" expanded="false" />
+                <element signature="e#17695#17834#0" expanded="false" />
+                <element signature="e#17865#17925#0" expanded="false" />
+                <element signature="e#17955#18007#0" expanded="false" />
+                <element signature="e#18035#18178#0" expanded="false" />
+                <element signature="e#18209#18263#0" expanded="false" />
+                <element signature="e#18293#19075#0" expanded="false" />
+                <element signature="e#19107#19168#0" expanded="false" />
+                <element signature="e#19197#19876#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -87,8 +87,8 @@
       <file leaf-file-name="Act-detail.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/page/Act-detail.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2640">
-              <caret line="88" column="21" lean-forward="false" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="21" />
+            <state relative-caret-position="239">
+              <caret line="84" column="82" lean-forward="true" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="82" />
               <folding>
                 <element signature="e#5237#5285#0" expanded="true" />
                 <element signature="e#12230#15086#0" expanded="false" />
@@ -112,7 +112,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>class</find>
       <find>top_search</find>
       <find>collect_top_p</find>
       <find>ccollect_top_vote_div</find>
@@ -142,6 +141,7 @@
       <find>vote-link</find>
       <find>regItem</find>
       <find>voteForm</find>
+      <find>换行</find>
     </findStrings>
     <dirStrings>
       <dir>D:\Biye\fe-binwang\bishefrontadmin</dir>
@@ -178,11 +178,11 @@
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="197" />
-    <option name="y" value="171" />
-    <option name="width" value="1639" />
-    <option name="height" value="1062" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="194" />
+    <option name="y" value="277" />
+    <option name="width" value="1375" />
+    <option name="height" value="733" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -264,7 +264,7 @@
       <workItem from="1511404440269" duration="28168000" />
       <workItem from="1511967130414" duration="3578000" />
       <workItem from="1512123644886" duration="27873000" />
-      <workItem from="1512522636163" duration="224000" />
+      <workItem from="1512522636163" duration="940000" />
     </task>
     <task id="LOCAL-00001" summary="导出用户数据到execl表">
       <created>1512010273530</created>
@@ -301,20 +301,26 @@
       <option name="project" value="LOCAL" />
       <updated>1512442859207</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="增加获取投票设置">
+      <created>1512522884193</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1512522884193</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59843000" />
+    <option name="totallyTimeSpent" value="60559000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="197" y="171" width="1639" height="1062" extended-state="0" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14553404" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14053077" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32852387" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34219652" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3207547" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -333,6 +339,32 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
@@ -342,7 +374,8 @@
     <MESSAGE value="定制投票逻辑，包括投票活动时间，投票规则说明，多少个显示，一次选择多少个投票，每天限制多少次，分享增加多少次，审核通过的作品数" />
     <MESSAGE value="增加投票活动名称填写" />
     <MESSAGE value="增加投票活动草料二维码链接" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加投票活动草料二维码链接" />
+    <MESSAGE value="增加获取投票设置" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加获取投票设置" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -410,20 +443,20 @@
             <element signature="n#modal#2;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#3;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#4;n#div#0;n#template#0;n#!!top" expanded="false" />
-            <element signature="e#10826#10927#0" expanded="true" />
-            <element signature="e#11798#12901#0" expanded="false" />
-            <element signature="e#14506#14574#0" expanded="false" />
-            <element signature="e#15060#15101#0" expanded="false" />
-            <element signature="e#15138#15320#0" expanded="false" />
-            <element signature="e#15556#17039#0" expanded="false" />
-            <element signature="e#17608#17747#0" expanded="false" />
-            <element signature="e#17778#17838#0" expanded="false" />
-            <element signature="e#17868#17920#0" expanded="false" />
-            <element signature="e#17948#18091#0" expanded="false" />
-            <element signature="e#18122#18176#0" expanded="false" />
-            <element signature="e#18206#18988#0" expanded="false" />
-            <element signature="e#19020#19081#0" expanded="false" />
-            <element signature="e#19110#19789#0" expanded="false" />
+            <element signature="e#10913#11014#0" expanded="true" />
+            <element signature="e#11885#12988#0" expanded="false" />
+            <element signature="e#14593#14661#0" expanded="false" />
+            <element signature="e#15147#15188#0" expanded="false" />
+            <element signature="e#15225#15407#0" expanded="false" />
+            <element signature="e#15643#17126#0" expanded="false" />
+            <element signature="e#17695#17834#0" expanded="false" />
+            <element signature="e#17865#17925#0" expanded="false" />
+            <element signature="e#17955#18007#0" expanded="false" />
+            <element signature="e#18035#18178#0" expanded="false" />
+            <element signature="e#18209#18263#0" expanded="false" />
+            <element signature="e#18293#19075#0" expanded="false" />
+            <element signature="e#19107#19168#0" expanded="false" />
+            <element signature="e#19197#19876#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -505,6 +538,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -584,6 +618,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -696,18 +731,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/page/Act-detail.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2640">
-          <caret line="88" column="21" lean-forward="false" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="21" />
-          <folding>
-            <element signature="e#5237#5285#0" expanded="true" />
-            <element signature="e#12230#15086#0" expanded="false" />
-            <element signature="e#15110#16930#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/page/Act-list.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
@@ -716,10 +739,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/page/Act-detail.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="84" column="82" lean-forward="true" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="82" />
+          <folding>
+            <element signature="e#5237#5285#0" expanded="true" />
+            <element signature="e#12230#15086#0" expanded="false" />
+            <element signature="e#15110#16930#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/page/Collect-list.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="18" column="42" lean-forward="false" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
+        <state relative-caret-position="180">
+          <caret line="44" column="86" lean-forward="false" selection-start-line="44" selection-start-column="86" selection-end-line="44" selection-end-column="86" />
           <folding>
             <element signature="n#div#0;n#modal#0;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#1;n#div#0;n#template#0;n#!!top" expanded="false" />
@@ -729,20 +764,20 @@
             <element signature="n#modal#2;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#3;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#4;n#div#0;n#template#0;n#!!top" expanded="false" />
-            <element signature="e#10826#10927#0" expanded="true" />
-            <element signature="e#11798#12901#0" expanded="false" />
-            <element signature="e#14506#14574#0" expanded="false" />
-            <element signature="e#15060#15101#0" expanded="false" />
-            <element signature="e#15138#15320#0" expanded="false" />
-            <element signature="e#15556#17039#0" expanded="false" />
-            <element signature="e#17608#17747#0" expanded="false" />
-            <element signature="e#17778#17838#0" expanded="false" />
-            <element signature="e#17868#17920#0" expanded="false" />
-            <element signature="e#17948#18091#0" expanded="false" />
-            <element signature="e#18122#18176#0" expanded="false" />
-            <element signature="e#18206#18988#0" expanded="false" />
-            <element signature="e#19020#19081#0" expanded="false" />
-            <element signature="e#19110#19789#0" expanded="false" />
+            <element signature="e#10913#11014#0" expanded="true" />
+            <element signature="e#11885#12988#0" expanded="false" />
+            <element signature="e#14593#14661#0" expanded="false" />
+            <element signature="e#15147#15188#0" expanded="false" />
+            <element signature="e#15225#15407#0" expanded="false" />
+            <element signature="e#15643#17126#0" expanded="false" />
+            <element signature="e#17695#17834#0" expanded="false" />
+            <element signature="e#17865#17925#0" expanded="false" />
+            <element signature="e#17955#18007#0" expanded="false" />
+            <element signature="e#18035#18178#0" expanded="false" />
+            <element signature="e#18209#18263#0" expanded="false" />
+            <element signature="e#18293#19075#0" expanded="false" />
+            <element signature="e#19107#19168#0" expanded="false" />
+            <element signature="e#19197#19876#0" expanded="false" />
           </folding>
         </state>
       </provider>
