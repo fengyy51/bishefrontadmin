@@ -1,7 +1,7 @@
 <template>
     <div>
 <!--投票活动模态框-->
-        <modal name="vote-modal" transition="pop-out" :height="600" :resizable="true" :pivotY="0.2">
+        <modal name="vote-modal" transition="pop-out" :height="680" :resizable="true" :pivotY="0.2">
             <div class="modal_close_btn">
                 <i class="el-icon-close" @click="closeVoteModal"></i>
             </div>
@@ -30,7 +30,7 @@
                     <el-form-item label="每次投票作品数" prop="pro_num">
                         <el-input v-model="voteForm.pro_num"   class="form_small"></el-input>
                     </el-form-item>
-                    <el-form-item label="每天投票次数上限" prop="vote_num">
+                    <el-form-item label="每天投票次数" prop="vote_num">
                         <el-input v-model="voteForm.vote_num"  class="form_small"></el-input>
                     </el-form-item>
                     <el-form-item label="分享是否增加次数" prop="share_num">
@@ -40,6 +40,9 @@
                             on-color="#13ce66"
                             off-color="#ff4949">
                         </el-switch>
+                    </el-form-item>
+                    <el-form-item label="每天投票次数上限" prop="vote_max_num">
+                        <el-input v-model="voteForm.vote_max_num"  class="form_small"></el-input>
                     </el-form-item>
                     <el-form-item label="投票活动规则说明" prop="votedecoration">
                         <span style="color: red">您在分段落换行时请添加&lt;br&nbsp;/&gt;符号</span>
@@ -290,6 +293,7 @@ export default {
                pro_num: '',
                vote_num: '',
                share_num: true,
+               vote_max_num:'',
                votedecoration: '',
            },
             rules: {
@@ -314,6 +318,11 @@ export default {
                     trigger: 'blur'
                 }],
                 vote_num:[{
+                    required: true,
+                    message: '请设定每天投票次数',
+                    trigger: 'blur'
+                }],
+                vote_max_num:[{
                     required: true,
                     message: '请设定每天投票次数上限',
                     trigger: 'blur'
@@ -394,6 +403,7 @@ export default {
                             proNum:parseInt(self.voteForm.pro_num),
                             voteNum:parseInt(self.voteForm.vote_num),
                             shareNum:self.voteForm.share_num,
+                            voteMaxNum:parseInt(self.voteForm.vote_max_num),
                             voteDecoration:self.voteForm.votedecoration,
                             proApproved:parseInt(self.approved_num),
 
