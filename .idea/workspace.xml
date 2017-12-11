@@ -54,8 +54,8 @@
       <file leaf-file-name="Collect-list.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/page/Collect-list.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="10" column="94" lean-forward="true" selection-start-line="10" selection-start-column="94" selection-end-line="10" selection-end-column="94" />
+            <state relative-caret-position="312">
+              <caret line="421" column="18" lean-forward="true" selection-start-line="421" selection-start-column="18" selection-end-line="421" selection-end-column="18" />
               <folding>
                 <element signature="n#div#0;n#modal#0;n#div#0;n#template#0;n#!!top" expanded="false" />
                 <element signature="n#modal#1;n#div#0;n#template#0;n#!!top" expanded="false" />
@@ -65,19 +65,19 @@
                 <element signature="n#modal#2;n#div#0;n#template#0;n#!!top" expanded="false" />
                 <element signature="n#modal#3;n#div#0;n#template#0;n#!!top" expanded="false" />
                 <element signature="n#modal#4;n#div#0;n#template#0;n#!!top" expanded="false" />
-                <element signature="e#11117#11218#0" expanded="true" />
-                <element signature="e#12089#13192#0" expanded="false" />
-                <element signature="e#14995#15063#0" expanded="false" />
-                <element signature="e#15549#15590#0" expanded="false" />
-                <element signature="e#15627#15809#0" expanded="false" />
-                <element signature="e#18174#18313#0" expanded="false" />
-                <element signature="e#18344#18404#0" expanded="false" />
-                <element signature="e#18434#18486#0" expanded="false" />
-                <element signature="e#18514#18657#0" expanded="false" />
-                <element signature="e#18688#18742#0" expanded="false" />
-                <element signature="e#18772#19554#0" expanded="false" />
-                <element signature="e#19586#19647#0" expanded="false" />
-                <element signature="e#19676#20355#0" expanded="false" />
+                <element signature="e#10638#10739#0" expanded="true" />
+                <element signature="e#11610#12713#0" expanded="false" />
+                <element signature="e#14516#14584#0" expanded="false" />
+                <element signature="e#15070#15111#0" expanded="false" />
+                <element signature="e#15148#15330#0" expanded="false" />
+                <element signature="e#17648#17787#0" expanded="false" />
+                <element signature="e#17818#17878#0" expanded="false" />
+                <element signature="e#17908#17960#0" expanded="false" />
+                <element signature="e#17988#18131#0" expanded="false" />
+                <element signature="e#18162#18216#0" expanded="false" />
+                <element signature="e#18246#19028#0" expanded="false" />
+                <element signature="e#19060#19121#0" expanded="false" />
+                <element signature="e#19150#19829#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -87,7 +87,7 @@
         <entry file="file://$PROJECT_DIR$/src/components/page/Act-detail.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="239">
-              <caret line="84" column="82" lean-forward="true" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="82" />
+              <caret line="84" column="82" lean-forward="false" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="82" />
               <folding>
                 <element signature="e#5237#5285#0" expanded="true" />
                 <element signature="e#12230#15086#0" expanded="false" />
@@ -135,12 +135,12 @@
       <find>act_name</find>
       <find>link</find>
       <find>linkTo</find>
-      <find>openVoteLinkModal</find>
       <find>params</find>
       <find>vote-link</find>
       <find>regItem</find>
       <find>voteForm</find>
       <find>换行</find>
+      <find>openVoteLinkModal</find>
     </findStrings>
     <dirStrings>
       <dir>D:\Biye\fe-binwang\bishefrontadmin</dir>
@@ -263,7 +263,7 @@
       <workItem from="1511404440269" duration="28168000" />
       <workItem from="1511967130414" duration="3578000" />
       <workItem from="1512123644886" duration="27873000" />
-      <workItem from="1512522636163" duration="2869000" />
+      <workItem from="1512522636163" duration="5194000" />
     </task>
     <task id="LOCAL-00001" summary="导出用户数据到execl表">
       <created>1512010273530</created>
@@ -314,11 +314,18 @@
       <option name="project" value="LOCAL" />
       <updated>1512630494153</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="投票活动说明添加换行说明，添加最大投票次数，一般投票次数限制">
+      <created>1512633431862</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1512633431862</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62488000" />
+    <option name="totallyTimeSpent" value="64813000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
@@ -382,7 +389,8 @@
     <MESSAGE value="增加投票活动草料二维码链接" />
     <MESSAGE value="增加获取投票设置" />
     <MESSAGE value="投票活动说明添加换行说明" />
-    <option name="LAST_COMMIT_MESSAGE" value="投票活动说明添加换行说明" />
+    <MESSAGE value="投票活动说明添加换行说明，添加最大投票次数，一般投票次数限制" />
+    <option name="LAST_COMMIT_MESSAGE" value="投票活动说明添加换行说明，添加最大投票次数，一般投票次数限制" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -450,19 +458,19 @@
             <element signature="n#modal#2;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#3;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#4;n#div#0;n#template#0;n#!!top" expanded="false" />
-            <element signature="e#11117#11218#0" expanded="true" />
-            <element signature="e#12089#13192#0" expanded="false" />
-            <element signature="e#14995#15063#0" expanded="false" />
-            <element signature="e#15549#15590#0" expanded="false" />
-            <element signature="e#15627#15809#0" expanded="false" />
-            <element signature="e#18174#18313#0" expanded="false" />
-            <element signature="e#18344#18404#0" expanded="false" />
-            <element signature="e#18434#18486#0" expanded="false" />
-            <element signature="e#18514#18657#0" expanded="false" />
-            <element signature="e#18688#18742#0" expanded="false" />
-            <element signature="e#18772#19554#0" expanded="false" />
-            <element signature="e#19586#19647#0" expanded="false" />
-            <element signature="e#19676#20355#0" expanded="false" />
+            <element signature="e#10638#10739#0" expanded="true" />
+            <element signature="e#11610#12713#0" expanded="false" />
+            <element signature="e#14516#14584#0" expanded="false" />
+            <element signature="e#15070#15111#0" expanded="false" />
+            <element signature="e#15148#15330#0" expanded="false" />
+            <element signature="e#17648#17787#0" expanded="false" />
+            <element signature="e#17818#17878#0" expanded="false" />
+            <element signature="e#17908#17960#0" expanded="false" />
+            <element signature="e#17988#18131#0" expanded="false" />
+            <element signature="e#18162#18216#0" expanded="false" />
+            <element signature="e#18246#19028#0" expanded="false" />
+            <element signature="e#19060#19121#0" expanded="false" />
+            <element signature="e#19150#19829#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -754,7 +762,7 @@
     <entry file="file://$PROJECT_DIR$/src/components/page/Act-detail.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="239">
-          <caret line="84" column="82" lean-forward="true" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="82" />
+          <caret line="84" column="82" lean-forward="false" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="82" />
           <folding>
             <element signature="e#5237#5285#0" expanded="true" />
             <element signature="e#12230#15086#0" expanded="false" />
@@ -765,8 +773,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/page/Collect-list.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="10" column="94" lean-forward="true" selection-start-line="10" selection-start-column="94" selection-end-line="10" selection-end-column="94" />
+        <state relative-caret-position="312">
+          <caret line="421" column="18" lean-forward="true" selection-start-line="421" selection-start-column="18" selection-end-line="421" selection-end-column="18" />
           <folding>
             <element signature="n#div#0;n#modal#0;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#1;n#div#0;n#template#0;n#!!top" expanded="false" />
@@ -776,19 +784,19 @@
             <element signature="n#modal#2;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#3;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#4;n#div#0;n#template#0;n#!!top" expanded="false" />
-            <element signature="e#11117#11218#0" expanded="true" />
-            <element signature="e#12089#13192#0" expanded="false" />
-            <element signature="e#14995#15063#0" expanded="false" />
-            <element signature="e#15549#15590#0" expanded="false" />
-            <element signature="e#15627#15809#0" expanded="false" />
-            <element signature="e#18174#18313#0" expanded="false" />
-            <element signature="e#18344#18404#0" expanded="false" />
-            <element signature="e#18434#18486#0" expanded="false" />
-            <element signature="e#18514#18657#0" expanded="false" />
-            <element signature="e#18688#18742#0" expanded="false" />
-            <element signature="e#18772#19554#0" expanded="false" />
-            <element signature="e#19586#19647#0" expanded="false" />
-            <element signature="e#19676#20355#0" expanded="false" />
+            <element signature="e#10638#10739#0" expanded="true" />
+            <element signature="e#11610#12713#0" expanded="false" />
+            <element signature="e#14516#14584#0" expanded="false" />
+            <element signature="e#15070#15111#0" expanded="false" />
+            <element signature="e#15148#15330#0" expanded="false" />
+            <element signature="e#17648#17787#0" expanded="false" />
+            <element signature="e#17818#17878#0" expanded="false" />
+            <element signature="e#17908#17960#0" expanded="false" />
+            <element signature="e#17988#18131#0" expanded="false" />
+            <element signature="e#18162#18216#0" expanded="false" />
+            <element signature="e#18246#19028#0" expanded="false" />
+            <element signature="e#19060#19121#0" expanded="false" />
+            <element signature="e#19150#19829#0" expanded="false" />
           </folding>
         </state>
       </provider>
