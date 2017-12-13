@@ -59,7 +59,7 @@ var router = new Router({
             },{
                 path: '/prize',
                 component: resolve => require(['../components/page/Prize-list.vue'], resolve)
-            }]
+            },],
         },
         {
             path: '/login',

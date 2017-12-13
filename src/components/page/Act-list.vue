@@ -29,6 +29,8 @@
             <!--<el-button type="primary" @click="linkToOtherUrl('0','/act-list/detail/')">添加</el-button>-->
         <!--</div>-->
         <el-table :data="tableData" border style="width: 100%">
+            <el-table-column prop="id" label="活动id">
+            </el-table-column>
             <el-table-column prop="name" label="活动名称">
             </el-table-column>
             <el-table-column prop="begin" label="起始日期" sortable>

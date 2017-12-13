@@ -6,11 +6,13 @@ import axios from './util/axios.js';
 import ElementUI from 'element-ui';
 import wsCache from 'web-storage-cache';
 import vmodal from 'vue-js-modal';
+import fileupload from 'vue-upload-component';
 import 'element-ui/lib/theme-default/index.css';
 import "babel-polyfill";
 import './mock/index.js';
 Vue.use(vmodal);
 Vue.use(ElementUI);
+Vue.use(fileupload);
 
 
 Vue.prototype.$wsCache = new wsCache();
