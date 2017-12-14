@@ -8,14 +8,14 @@
                     <span v-if="file.error">上传失败</span>
                     <span v-else-if="file.success">成功</span>
                     <span v-else-if="file.active">上传中</span>
-                    <span v-else-if="file.active">上传中</span>
                     <span v-else></span>
                 </li>
             </ul>
             <div class="example-btn">
                 <file-upload
+                    prop="files"
                     class="btn btn-primary"
-                    post-action="prize/excel"
+                    post-action="http://localhost:8083/manual/excel/prize"
                     extensions=""
                     accept="xlsx,xls"
                     :multiple="false"
@@ -35,8 +35,8 @@
                     <i class="fa fa-stop" aria-hidden="true"></i>
                     停止上传
                 </el-button>
-                <img src="2.jpg" style="width: 100px">
                 <el-button type="primary" @click="openMuban">奖项模板下载</el-button>
+                <span style="font-size: 13px;color:red">此处为上传奖项、奖品数据配置，请上传前将单元格格式设置好</span>
             </div>
         </div>
 
@@ -105,9 +105,15 @@ import FileUpload from 'vue-upload-component'
 import {
     MessageBox
 } from 'element-ui';
+
+
+
 export default {
     data() {
         return {
+            attence: '',
+            info:'',
+            attenceFile: {},
             files:[],
             search_form: {
                 type: 0
@@ -131,13 +137,8 @@ export default {
         FileUpload
     },
     methods: {
-
         openMuban(){
             window.open('/static/muban.xlsx','_self');
-//            window.location.href="../../../static/html/muban.html";
-//            window.open('/');
-
-//            window.open('www.baidu.com');
         },
         inputFilter(newFile, oldFile, prevent) {
             if (newFile && !oldFile) {
@@ -258,6 +259,7 @@ export default {
     }
 }
 </script>
+
 <style>
     .btn-primary{color:#fff;background-color:#007bff;border-color:#007bff}
     .btn-primary:hover{color:#fff;background-color:#0069d9;border-color:#0062cc}
