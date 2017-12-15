@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85961ce3-0876-4c23-9046-0abdcbcf8b42" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/muban.xlsx" afterPath="$PROJECT_DIR$/static/muban.xlsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/page/Prize-list.vue" afterPath="$PROJECT_DIR$/src/components/page/Prize-list.vue" />
     </list>
@@ -91,23 +92,21 @@
       <file leaf-file-name="Prize-list.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/page/Prize-list.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="48" column="13" lean-forward="true" selection-start-line="48" selection-start-column="13" selection-end-line="48" selection-end-column="13" />
+            <state relative-caret-position="521">
+              <caret line="441" column="45" lean-forward="true" selection-start-line="441" selection-start-column="45" selection-end-line="441" selection-end-column="45" />
               <folding>
                 <element signature="n#div#0;n#div#0;n#template#0;n#!!top" expanded="false" />
                 <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#div#1;n#div#0;n#template#0;n#!!top" expanded="false" />
                 <element signature="n#el-table#0;n#div#0;n#template#0;n#!!top" expanded="false" />
                 <element signature="n#modal#0;n#div#0;n#template#0;n#!!top" expanded="false" />
-                <element signature="n#modal#1;n#div#0;n#template#0;n#!!top" expanded="false" />
-                <element signature="e#9679#9792#0" expanded="true" />
-                <element signature="e#11955#11981#0" expanded="false" />
-                <element signature="e#12038#12104#0" expanded="false" />
-                <element signature="e#12153#12666#0" expanded="false" />
-                <element signature="e#12192#12656#0" expanded="false" />
-                <element signature="e#12705#13410#0" expanded="false" />
-                <element signature="e#16808#17179#0" expanded="false" />
-                <element signature="e#17199#17843#0" expanded="false" />
-                <element signature="e#17934#18567#0" expanded="false" />
+                <element signature="e#9780#9893#0" expanded="true" />
+                <element signature="e#12050#12076#0" expanded="false" />
+                <element signature="e#12133#12199#0" expanded="false" />
+                <element signature="e#12248#12761#0" expanded="false" />
+                <element signature="e#12287#12751#0" expanded="false" />
+                <element signature="e#12800#13505#0" expanded="false" />
+                <element signature="e#18195#18828#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -177,15 +176,12 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Vue</find>
-      <find>chooseFile</find>
       <find>attenceInput</find>
       <find>upload</find>
       <find>file</find>
       <find>collectId</find>
       <find>types</find>
       <find>relationIds</find>
-      <find>relationId</find>
       <find>attence</find>
       <find>attenceFile</find>
       <find>typeList</find>
@@ -207,6 +203,9 @@
       <find>votedecoration</find>
       <find>prize_num</find>
       <find>begin</find>
+      <find>relationId</find>
+      <find>actName</find>
+      <find>search</find>
     </findStrings>
     <dirStrings>
       <dir>D:\Biye\fe-binwang\bishefrontadmin\src</dir>
@@ -253,8 +252,8 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="61" />
-    <option name="y" value="358" />
+    <option name="x" value="252" />
+    <option name="y" value="348" />
     <option name="width" value="1639" />
     <option name="height" value="1067" />
   </component>
@@ -394,7 +393,7 @@
       <workItem from="1511967130414" duration="3578000" />
       <workItem from="1512123644886" duration="27873000" />
       <workItem from="1512522636163" duration="7844000" />
-      <workItem from="1513128235043" duration="41693000" />
+      <workItem from="1513128235043" duration="44245000" />
     </task>
     <task id="LOCAL-00001" summary="导出用户数据到execl表">
       <created>1512010273530</created>
@@ -487,14 +486,21 @@
       <option name="project" value="LOCAL" />
       <updated>1513324372234</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="抽奖param设置">
+      <created>1513328900447</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1513328900447</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109156000" />
+    <option name="totallyTimeSpent" value="111708000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="61" y="358" width="1639" height="1067" extended-state="0" />
+    <frame x="252" y="348" width="1639" height="1067" extended-state="0" />
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18988132" sideWeight="0.8253752" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -560,7 +566,8 @@
     <MESSAGE value="增加奖品配置模板下载" />
     <MESSAGE value="导入奖项、奖品配置excel" />
     <MESSAGE value="奖项、奖品配置调整" />
-    <option name="LAST_COMMIT_MESSAGE" value="奖项、奖品配置调整" />
+    <MESSAGE value="抽奖param设置" />
+    <option name="LAST_COMMIT_MESSAGE" value="抽奖param设置" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1000,23 +1007,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/page/Prize-list.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="48" column="13" lean-forward="true" selection-start-line="48" selection-start-column="13" selection-end-line="48" selection-end-column="13" />
+        <state relative-caret-position="521">
+          <caret line="441" column="45" lean-forward="true" selection-start-line="441" selection-start-column="45" selection-end-line="441" selection-end-column="45" />
           <folding>
             <element signature="n#div#0;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#div#1;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#el-table#0;n#div#0;n#template#0;n#!!top" expanded="false" />
             <element signature="n#modal#0;n#div#0;n#template#0;n#!!top" expanded="false" />
-            <element signature="n#modal#1;n#div#0;n#template#0;n#!!top" expanded="false" />
-            <element signature="e#9679#9792#0" expanded="true" />
-            <element signature="e#11955#11981#0" expanded="false" />
-            <element signature="e#12038#12104#0" expanded="false" />
-            <element signature="e#12153#12666#0" expanded="false" />
-            <element signature="e#12192#12656#0" expanded="false" />
-            <element signature="e#12705#13410#0" expanded="false" />
-            <element signature="e#16808#17179#0" expanded="false" />
-            <element signature="e#17199#17843#0" expanded="false" />
-            <element signature="e#17934#18567#0" expanded="false" />
+            <element signature="e#9780#9893#0" expanded="true" />
+            <element signature="e#12050#12076#0" expanded="false" />
+            <element signature="e#12133#12199#0" expanded="false" />
+            <element signature="e#12248#12761#0" expanded="false" />
+            <element signature="e#12287#12751#0" expanded="false" />
+            <element signature="e#12800#13505#0" expanded="false" />
+            <element signature="e#18195#18828#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -48,8 +48,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item class="top_search">
-                    <el-select v-model="search_form.relationId" placeholder="请选择关联抽奖活动">
-                        <el-option :name="search_form.relationId" v-for="item in relationIdList"  :value="item"></el-option>
+                    <el-select v-model="search_form.actName" placeholder="请选择关联抽奖活动">
+                        <el-option :name="search_form.actName" v-for="item in actNameList"  :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item class="top_search">
@@ -66,7 +66,7 @@
         <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
             <el-table-column label="奖品序号" prop="id">
             </el-table-column>
-            <el-table-column label="关联活动" prop="relationId">
+            <el-table-column label="关联活动" prop="actName">
             </el-table-column>
             <el-table-column label="种类" prop="type">
             </el-table-column>
@@ -95,13 +95,16 @@
         </div>
         <!-- 修改数具 -->
         <modal name="change-num-modal" transition="pop-out" :height="700" :pivotY="0.2">
+            <div class="modal_close_btn">
+                <i class="el-icon-close" @click="closeChangeNumModal"></i>
+            </div>
             <div class="modal-form">
                 <el-form ref="change-num-modal" label-width="90px">
                     <el-form-item label="奖品序号">
                         <el-input type="text" v-model="changeNumForm.id" :disabled="true" class="form_small"></el-input>
                     </el-form-item>
-                    <el-form-item label="关联活动序号">
-                        <el-input type="text" v-model="changeNumForm.relationId" :disabled="true" class="form_small"></el-input>
+                    <el-form-item label="关联活动">
+                        <el-input type="text" v-model="changeNumForm.actName" :disabled="true" ></el-input>
                     </el-form-item>
                     <el-form-item label="名称" >
                         <el-input type="text" v-model="changeNumForm.name" class="form_small"></el-input>
@@ -202,10 +205,10 @@ export default {
             files:[],
             search_form: {
                 type:'',
-                relationId:''
+                actName:''
             },
             typeList: [],
-            relationIdList:[],
+            actNameList:[],
             changeNumForm: {
                 id: '',
                 num: ''
@@ -374,7 +377,7 @@ export default {
         },
         onChangeNumSubmit() {
             var id = this.changeNumForm.id;
-            var relationId=this.changeNumForm.relationId;
+            var actName=this.changeNumForm.actName;
             var num = this.changeNumForm.num;
             var name=this.changeNumForm.name;
             var type=this.changeNumForm.type;
@@ -390,7 +393,7 @@ export default {
                     params: {
                         id: id,
                         num: num,
-                        relationId: relationId,
+                        actName: actName,
                         name:name,
                         type:type,
                         ratio:ratio,
@@ -417,18 +420,24 @@ export default {
                 .then((res)=>{
                     if(res!=null){
                         self.typeList=res.data.type;
-                        self.relationIdList=res.data.relationId;
+                        self.actNameList=res.data.actName;
                     }
                 })
         },
         getData() {
             const self = this;
+            var type=self.search_form.type;
+            console.log(self.search_form.type);
+            if(self.search_form.type==null){
+                type='';
+            }
+            console.log(type);
             self.$axios({
                     url: '/prize/list',
                     method: 'get',
                     params: {
-                        type: self.search_form.type,
-                        relationId: self.search_form.relationId,
+                        type: type,
+                        actName: self.search_form.actName,
                         curPage: self.cur_page,
                         pageSum: self.pageSum
                     }
@@ -465,7 +474,7 @@ export default {
         },
         handleEdit(row) {
             this.changeNumForm.id = row.id;
-            this.changeNumForm.relationId=row.relationId;
+            this.changeNumForm.actName=row.actName;
             this.changeNumForm.num = row.num;
             this.changeNumForm.type=row.type;
             this.changeNumForm.name=row.name;
