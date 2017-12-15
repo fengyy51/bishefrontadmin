@@ -41,55 +41,85 @@
         </div>
 
         <div class="search_form">
-            <el-form ref="search_form" :model="search_form">
+            <el-form ref="search_form" :model="search_form"  >
                 <el-form-item class="top_search">
-                    <el-radio-group v-model="search_form.type">
-                        <el-radio class="radio" :label="0">一等奖与二等奖</el-radio>
-                        <el-radio class="radio" :label="1">三等奖与幸运奖</el-radio>
-                        <el-radio class="radio" :label="2">不限量奖</el-radio>
-                    </el-radio-group>
+                    <el-select v-model="search_form.type" placeholder="请选择奖项类型" >
+                        <el-option  :name="search_form.type" v-for="item in typeList"  :value="item"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item class="top_search">
+                    <el-select v-model="search_form.relationId" placeholder="请选择关联活动">
+                        <el-option :name="search_form.relationId" v-for="item in relationIdList"  :value="item"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item class="top_search">
                     <el-button type="success" @click="searchHandle">搜索</el-button>
                 </el-form-item>
             </el-form>
         </div>
-        <div class="top-btn">
-            <el-button type="primary" @click="openChangeNumModal">修改数量</el-button>
-        </div>
+        <!--<div class="top-btn">-->
+            <!--<el-button type="primary" @click="openChangeNumModal">修改数量</el-button>-->
+        <!--</div>-->
         <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
             <el-table-column label="奖品序号" prop="id">
             </el-table-column>
+            <el-table-column label="关联活动" prop="relationId">
+            </el-table-column>
             <el-table-column label="种类" prop="type">
-                <template scope="scope">
-                    <div v-if="scope.row.type === 1">
-                        一等奖
-                    </div>
-                    <div v-else-if="scope.row.type == 2">
-                        二等奖
-                    </div>
-                    <div v-else-if="scope.row.type == 3">
-                        三等奖
-                    </div>
-                    <div v-else>
-                        幸运奖
-                    </div>
-                </template>
             </el-table-column>
             <el-table-column label="名称" prop="name">
             </el-table-column>
             <el-table-column label="库存" prop="num">
             </el-table-column>
+            <el-table-column label="抽中概率" prop="ratio">
+            </el-table-column>
+            <el-table-column label="奖品说明" prop="info">
+            </el-table-column>
+            <el-table-column label="兑奖时间" prop="duijiangTime">
+            </el-table-column>
+            <el-table-column label="兑奖地点" prop="duijiangLoc">
+            </el-table-column>
+            <el-table-column label="操作">
+                <template scope="scope">
+                    <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
+                    <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+                </template>
+            </el-table-column>
         </el-table>
-        <!-- 修改数量 -->
-        <modal name="change-num-modal" transition="pop-out" :height="200" :pivotY="0.2">
+        <div class="pagination">
+            <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
+            </el-pagination>
+        </div>
+        <!-- 修改数具 -->
+        <modal name="change-num-modal" transition="pop-out" :height="700" :pivotY="0.2">
             <div class="modal-form">
                 <el-form ref="change-num-modal" label-width="90px">
                     <el-form-item label="奖品序号">
-                        <el-input type="text" v-model="changeNumForm.id" class="form_small"></el-input>
+                        <el-input type="text" v-model="changeNumForm.id" :disabled="true" class="form_small"></el-input>
                     </el-form-item>
-                    <el-form-item label="数量">
+                    <el-form-item label="关联活动序号">
+                        <el-input type="text" v-model="changeNumForm.relationId" :disabled="true" class="form_small"></el-input>
+                    </el-form-item>
+                    <el-form-item label="名称" >
+                        <el-input type="text" v-model="changeNumForm.name" class="form_small"></el-input>
+                    </el-form-item>
+                    <el-form-item label="种类">
+                        <el-input type="text" v-model="changeNumForm.type" class="form_small"></el-input>
+                    </el-form-item>
+                    <el-form-item label="库存">
                         <el-input type="text" v-model="changeNumForm.num" class="form_small"></el-input>
+                    </el-form-item>
+                    <el-form-item label="抽中概率">
+                        <el-input type="text" v-model="changeNumForm.ratio" class="form_small"></el-input>
+                    </el-form-item>
+                    <el-form-item label="奖品说明">
+                        <el-input type="text" v-model="changeNumForm.info" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="兑奖时间">
+                        <el-input type="text" v-model="changeNumForm.duijiangTime" class="form_small"></el-input>
+                    </el-form-item>
+                    <el-form-item label="兑奖地点">
+                        <el-input type="text" v-model="changeNumForm.duijiangLoc" class="form_small"></el-input>
                     </el-form-item>
                     <el-form-item class="modal-btn-group">
                         <el-button type="primary" @click="onChangeNumSubmit">提交</el-button>
@@ -105,52 +135,46 @@ import FileUpload from 'vue-upload-component'
 import {
     MessageBox
 } from 'element-ui';
-
-
-
 export default {
     data() {
         return {
-            attence: '',
-            info:'',
-            attenceFile: {},
             files:[],
             search_form: {
-                type: 0
+                type:'',
+                relationId:''
             },
+            typeList: [],
+            relationIdList:[],
             changeNumForm: {
                 id: '',
                 num: ''
             },
             tableData: [],
-            // pageSum: 10,
-            // sum: 0,
-            // cur_page: 1,
+             pageSum: 8,
+             sum: 0,
+             cur_page: 1,
             loading: false,
-            collectId: 1
         }
     },
     mounted() {
-        this.getData();
+        this.getSearch();
     },
     components: {
         FileUpload
     },
     methods: {
+        //导入excel，模板
         openMuban(){
             window.open('/static/muban.xlsx','_self');
         },
         inputFilter(newFile, oldFile, prevent) {
             if (newFile && !oldFile) {
-                // Before adding a file
                 // 添加文件前
-
                 // Filter system files or hide files
                 // 过滤系统文件 和隐藏文件
                 if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
                     return prevent()
                 }
-
                 // Filter php html js file
                 // 过滤 php html js 文件
                 if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
@@ -173,42 +197,21 @@ export default {
                 // remove
                 console.log('remove', oldFile)
             }
-        },
-        /**
-         * Has changed
-         * @param  Object|undefined   newFile   只读
-         * @param  Object|undefined   oldFile   只读
-         * @return undefined
-         */
-//        inputFile: function (newFile, oldFile) {
-//            if (newFile && oldFile && !newFile.active && oldFile.active) {
+            if (newFile && oldFile && !newFile.active && oldFile.active) {
 //                // 获得相应数据
-//                console.log('response', newFile.response)
-//                if (newFile.xhr) {
-//                    //  获得响应状态码
-//                    console.log('status', newFile.xhr.status)
-//                }
-//            }
-//        },
-//        /**
-//         * Pretreatment
-//         * @param  Object|undefined   newFile   读写
-//         * @param  Object|undefined   oldFile   只读
-//         * @param  Function           prevent   阻止回调
-//         * @return undefined
-//         */
-//        inputFilter: function (newFile, oldFile, prevent) {
-//            if (newFile && !oldFile) {
-//                // 过滤不是excel后缀的文件
-//                if (!/\.(xlsx)$/i.test(newFile.name)) {
-//                    return prevent()
-//                }
-//            }
-//
-//        },
+                console.log('response', newFile.response)
+                if (newFile.xhr) {
+                    //  获得响应状态码
+                    console.log('status', newFile.xhr.status)
+                }
+            }
+        },
+//导入excel，模板
+        handleCurrentChange(val) {
+            this.cur_page = val;
+            this.getData();
+        },
         openChangeNumModal() {
-            this.changeNumForm.id = '';
-            this.changeNumForm.num = '';
             this.$modal.show('change-num-modal');
         },
         closeChangeNumModal() {
@@ -216,7 +219,14 @@ export default {
         },
         onChangeNumSubmit() {
             var id = this.changeNumForm.id;
+            var relationId=this.changeNumForm.relationId;
             var num = this.changeNumForm.num;
+            var name=this.changeNumForm.name;
+            var type=this.changeNumForm.type;
+            var ratio=this.changeNumForm.ratio;
+            var info=this.changeNumForm.info;
+            var duijiangTime=this.changeNumForm.duijiangTime;
+            var duijiangLoc=this.changeNumForm.duijiangLoc;
             const self = this;
             console.log(id + ":" + num);
             self.$axios({
@@ -225,7 +235,13 @@ export default {
                     params: {
                         id: id,
                         num: num,
-                        relationId: self.collectId
+                        relationId: relationId,
+                        name:name,
+                        type:type,
+                        ratio:ratio,
+                        info:info,
+                        duijiangTime:duijiangTime,
+                        duijiangLoc:duijiangLoc
                     }
                 })
                 .then((res) => {
@@ -233,8 +249,21 @@ export default {
                         self.getData();
                         self.$message('修改成功!');
                     } else
-                        self.$message.error("修改失败！请确保id为不限量奖品");
+                        self.$message.error("修改失败");
                     self.$modal.hide('change-num-modal');
+                })
+        },
+        getSearch(){
+            const self=this;
+            self.$axios({
+                url:'prize/search',
+                method:'get'
+            })
+                .then((res)=>{
+                    if(res!=null){
+                        self.typeList=res.data.type;
+                        self.relationIdList=res.data.relationId;
+                    }
                 })
         },
         getData() {
@@ -244,18 +273,53 @@ export default {
                     method: 'get',
                     params: {
                         type: self.search_form.type,
-                        relationId: self.collectId
+                        relationId: self.search_form.relationId,
+                        curPage: self.cur_page,
+                        pageSum: self.pageSum
                     }
                 })
                 .then((res) => {
                     if (res != null) {
                         self.tableData = res.data.list;
+                        self.sum = res.data.sum;
                     }
                 })
         },
         searchHandle() {
             this.getData();
-        }
+        },
+        handleDelete(id) {
+            const self = this;
+            MessageBox.confirm('确定删除？').then(function(action) {
+                self.$axios({
+                    url: '/prize/param/delete',
+                    method: 'post',
+                    data: {
+                        id: id
+                    }
+                })
+                    .then((res) => {
+                        if (res != null) {
+                            self.$message("删除成功");
+                            self.getData();
+                        }
+                    })
+            }).catch(function() {
+                console.log("取消活动删除");
+            });
+        },
+        handleEdit(row) {
+            this.changeNumForm.id = row.id;
+            this.changeNumForm.relationId=row.relationId;
+            this.changeNumForm.num = row.num;
+            this.changeNumForm.type=row.type;
+            this.changeNumForm.name=row.name;
+            this.changeNumForm.info=row.info;
+            this.changeNumForm.ratio=row.ratio;
+            this.changeNumForm.duijiangTime=row.duijiangTime;
+            this.changeNumForm.duijiangLoc=row.duijiangLoc;
+            this.openChangeNumModal();
+        },
     }
 }
 </script>
