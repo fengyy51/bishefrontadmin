@@ -48,7 +48,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item class="top_search">
-                    <el-select v-model="search_form.relationId" placeholder="请选择关联活动">
+                    <el-select v-model="search_form.relationId" placeholder="请选择关联抽奖活动">
                         <el-option :name="search_form.relationId" v-for="item in relationIdList"  :value="item"></el-option>
                     </el-select>
                 </el-form-item>
@@ -56,6 +56,9 @@
                     <el-button type="success" @click="searchHandle">搜索</el-button>
                 </el-form-item>
             </el-form>
+        </div>
+        <div class="top-btn top-btn-left">
+            <el-button type="primary" @click="openPrizeModal">发起抽奖</el-button>
         </div>
         <!--<div class="top-btn">-->
             <!--<el-button type="primary" @click="openChangeNumModal">修改数量</el-button>-->
@@ -128,9 +131,67 @@
                 </el-form>
             </div>
         </modal>
+        <!--抽奖活动模态框-->
+        <modal name="prize-modal" transition="pop-out" :height="680" :resizable="true" :pivotY="0.2">
+            <div class="modal_close_btn">
+                <i class="el-icon-close" @click="closePrizeModal"></i>
+            </div>
+            <div class="modal-form">
+                <el-form ref="prizeForm" :model="prizeForm" :rules="rules" label-width="80px" >
+                    <el-form-item label="活动名称" prop="act_name">
+                        <el-input v-model="prizeForm.act_name"  class="form_middle"></el-input>
+                    </el-form-item>
+                    <el-form-item label="起始时间" prop="begin">
+                        <el-date-picker v-model="tempBegin" type="datetime" placeholder="选择日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                    <br/>
+                    <el-form-item label="结束时间" prop="end">
+                        <el-date-picker v-model="tempEnd" type="datetime" placeholder="选择日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                    <br/>
+                    <el-form-item label="每天抽奖次数" prop="prize_num">
+                        <el-input v-model="prizeForm.prize_num"  class="form_small"></el-input>
+                    </el-form-item>
+                    <el-form-item label="分享是否增加次数" prop="share_num">
+                        <el-switch
+                            v-model="prizeForm.share_num"
+                            on-text="是" off-text="否"
+                            on-color="#13ce66"
+                            off-color="#ff4949">
+                        </el-switch>
+                    </el-form-item>
+                    <el-form-item label="每天抽奖次数上限" prop="prize_max_num">
+                        <el-input v-model="prizeForm.prize_max_num"  class="form_small"></el-input>
+                    </el-form-item>
+                    <el-form-item label="抽奖活动规则说明" prop="prizedecoration">
+                        <span style="color: red">您在分段落换行时请添加&lt;br&nbsp;/&gt;符号</span>
+                        <el-input
+                            class="form_small"
+                            id="prizedecoration"
+                            type="textarea"
+                            :rows="2"
+                            :autosize="true"
+                            placeholder="请输入抽奖规则说明"
+                            v-model="prizeForm.prizedecoration">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item class="modal-btn-group">
+                        <el-button type="primary" @click="onPrizeSubmit">发起抽奖</el-button>
+                        <el-button @click="closePrizeModal">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </modal>
+        <!--抽奖活动模态框结束-->
     </div>
 </template>
 <script>
+    import {
+        TransDetailDateToString,
+        TransDetailStringToDate
+    } from '../../util/date-helper.js';
 import FileUpload from 'vue-upload-component'
 import {
     MessageBox
@@ -154,10 +215,63 @@ export default {
              sum: 0,
              cur_page: 1,
             loading: false,
+            tempBegin: '',
+            tempEnd: '',
+            prizeForm: {
+                act_name:'',
+                begin:'',
+                end:'',
+                prize_num: '',
+                share_num: true,
+                prize_max_num:'',
+                prizedecoration: '',
+            },
+            rules: {
+                act_name:[{
+                    required:true,
+                    message:'请填写活动名称',
+                    trigger:'blur'
+                }],
+                begin: [{
+                    required: true,
+                    message: '请选择起始日期',
+                    trigger: 'blur'
+                }],
+                end: [{
+                    required: true,
+                    message: '请选择结束日期',
+                    trigger: 'blur'
+                }],
+                prize_num:[{
+                    required: true,
+                    message: '请设定每天抽奖次数',
+                    trigger: 'blur'
+                }],
+                prize_max_num:[{
+                    required: true,
+                    message: '请设定每天抽奖次数上限',
+                    trigger: 'blur'
+                }],
+                prizedecoration:[{
+                    required:true,
+                    message:'请填写抽奖规则',
+                    trigger:'blur'
+                }]
+            }
+
         }
     },
     mounted() {
         this.getSearch();
+    },
+    watch: {
+        tempBegin: function(val) {
+            this.prizeForm.begin = TransDetailDateToString(val);
+        },
+        tempEnd: function(val) {
+
+            this.prizeForm.end = TransDetailDateToString(val);
+        },
     },
     components: {
         FileUpload
@@ -207,6 +321,47 @@ export default {
             }
         },
 //导入excel，模板
+        //       发起投票模态框开始
+        openPrizeModal(){
+//            this.resetForm();
+            this.$modal.show('prize-modal');
+        },
+        closePrizeModal(){
+            this.$modal.hide('prize-modal');
+        },
+        onPrizeSubmit(){
+            const self=this;
+            self.$refs["prizeForm"].validate((valid) => {
+                if (valid) {
+                    if(self.prizeForm.begin>self.prizeForm.end){
+                        this.$message.error("请填写正确的活动起止时间!");
+                        return;
+                    }
+                    self.$axios({
+                        url:'/prize/post-prize-param',
+                        method:'post',
+                        params:{
+                            actName:self.prizeForm.act_name,
+                            begin:self.prizeForm.begin,
+                            end:self.prizeForm.end,
+                            prizeNum:parseInt(self.prizeForm.prize_num),
+                            shareNum:self.prizeForm.share_num,
+                            prizeMaxNum:parseInt(self.prizeForm.prize_max_num),
+                            prizeDecoration:self.prizeForm.prizedecoration,
+
+                        }
+                    })
+                        .then((res) => {
+                            if (res != null && res.data.result)
+                                self.$message('发起成功!');
+                            else
+                                self.$message.error("发起失败！");
+                            self.$modal.hide('prize-modal');
+                        })
+                }
+            })
+        },
+        //       发起投票模态框结束
         handleCurrentChange(val) {
             this.cur_page = val;
             this.getData();
@@ -324,7 +479,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .btn-primary{color:#fff;background-color:#007bff;border-color:#007bff}
     .btn-primary:hover{color:#fff;background-color:#0069d9;border-color:#0062cc}
     .btn-primary.focus,.btn-primary:focus{box-shadow:0 0 0 3px rgba(0,123,255,.5)}
@@ -398,5 +553,31 @@ export default {
     .example-simple label.btn {
         margin-bottom: 0;
         margin-right: 1rem;
+    }
+    /*//抽奖*/
+    .top-btn-left{
+        float: left;
+    }
+    .modal_close_btn {
+        float: right;
+        margin: 15px 20px 0 0;
+        color: #999;
+    }
+    .el-icon-close:hover {
+        color: #333;
+        cursor: pointer;
+    }
+    .green{
+        color: #04be02;
+        width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .modal-form {
+        margin-top: 40px;
+    }
+    #prizedecoration{
+        width: 450px!important;
+        height: 40px!important;
     }
 </style>
