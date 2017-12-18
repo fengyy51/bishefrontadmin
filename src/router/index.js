@@ -58,8 +58,12 @@ var router = new Router({
                 component: resolve => require(['../components/page/Collect-list.vue'], resolve)
             },{
                 path: '/prize',
-                component: resolve => require(['../components/page/Prize-list.vue'], resolve)
-            },],
+                component: resolve => require(['../components/page/Prize-detail.vue'], resolve)
+            },{
+                path: '/prize-list',
+                    component: resolve => require(['../components/page/Prize-list.vue'], resolve)
+                },
+            ],
         },
         {
             path: '/login',

@@ -1,156 +1,49 @@
 <template>
     <div>
-        <div class="upload">
-            <ul>
-                <li v-for="(file, index) in files" :key="file.id">
-                    <span>{{file.name}}</span> -
-                    <!--<span>{{file.size | formatSize}}</span> - -->
-                    <span v-if="file.error">上传失败</span>
-                    <span v-else-if="file.success">成功</span>
-                    <span v-else-if="file.active">上传中</span>
-                    <span v-else></span>
-                </li>
-            </ul>
-            <div class="example-btn">
-                <file-upload
-                    prop="files"
-                    class="btn btn-primary"
-                    post-action="http://localhost:8083/manual/excel/prize"
-                    extensions=""
-                    accept="xlsx,xls"
-                    :multiple="false"
-                    :size="1024 * 1024 * 10"
-                    v-model="files"
-                    @input-filter="inputFilter"
-                    @input-file="inputFile"
-                    ref="upload">
-                    <i class="fa fa-plus"></i>
-                    选择excel表
-                </file-upload>
-                <el-button type="success"  v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
-                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                    开始上传
-                </el-button>
-                <el-button type="danger"   v-else @click.prevent="$refs.upload.active = false">
-                    <i class="fa fa-stop" aria-hidden="true"></i>
-                    停止上传
-                </el-button>
-                <el-button type="primary" @click="openMuban">奖项模板下载</el-button>
-                <span style="font-size: 13px;color:red">此处为上传奖项、奖品数据配置，请上传前将单元格格式设置好</span>
-            </div>
+        <div class="crumbs">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ path: '/prize-list/' }">
+                    <i class="el-icon-date"></i>抽奖活动管理
+                </el-breadcrumb-item>
+                <el-breadcrumb-item >我发起的抽奖活动</el-breadcrumb-item>
+            </el-breadcrumb>
         </div>
-
         <div class="search_form">
-            <el-form ref="search_form" :model="search_form"  >
+            <el-form ref="search_form" :model="search_form">
                 <el-form-item class="top_search">
-                    <el-select v-model="search_form.type" placeholder="请选择奖项类型" >
-                        <el-option  :name="search_form.type" v-for="item in typeList"  :value="item"></el-option>
-                    </el-select>
+                    <el-input v-model="search_form.name" class="search_input" placeholder="搜索名称"></el-input>
                 </el-form-item>
                 <el-form-item class="top_search">
-                    <el-select v-model="search_form.actName" placeholder="请选择关联抽奖活动">
-                        <el-option :name="search_form.actName" v-for="item in actNameList"  :value="item"></el-option>
-                    </el-select>
+                    <el-date-picker type="date" placeholder="起始日期" v-model="tempBegin" class="search_input"></el-date-picker>
+                </el-form-item>
+                <el-form-item class="top_search">
+                    <el-date-picker type="date" placeholder="结束日期" v-model="tempEnd" class="search_input"></el-date-picker>
                 </el-form-item>
                 <el-form-item class="top_search">
                     <el-button type="success" @click="searchHandle">搜索</el-button>
                 </el-form-item>
             </el-form>
         </div>
-        <div class="top-btn top-btn-left">
-            <el-button type="primary" @click="openPrizeModal">发起抽奖</el-button>
-        </div>
-        <!--<div class="top-btn">-->
-            <!--<el-button type="primary" @click="openChangeNumModal">修改数量</el-button>-->
-        <!--</div>-->
-        <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
-            <el-table-column label="奖品序号" prop="id">
-            </el-table-column>
-            <el-table-column label="关联活动" prop="actName">
-            </el-table-column>
-            <el-table-column label="种类" prop="type">
-            </el-table-column>
-            <el-table-column label="名称" prop="name">
-            </el-table-column>
-            <el-table-column label="库存" prop="num">
-            </el-table-column>
-            <el-table-column label="抽中概率" prop="ratio">
-            </el-table-column>
-            <el-table-column label="奖品说明" prop="info">
-            </el-table-column>
-            <el-table-column label="兑奖时间" prop="duijiangTime">
-            </el-table-column>
-            <el-table-column label="兑奖地点" prop="duijiangLoc">
-            </el-table-column>
-            <el-table-column label="操作">
-                <template scope="scope">
-                    <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
-                    <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <div class="pagination">
-            <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
-            </el-pagination>
-        </div>
-        <!-- 修改数具 -->
-        <modal name="change-num-modal" transition="pop-out" :height="700" :pivotY="0.2">
-            <div class="modal_close_btn">
-                <i class="el-icon-close" @click="closeChangeNumModal"></i>
-            </div>
-            <div class="modal-form">
-                <el-form ref="change-num-modal" label-width="90px">
-                    <el-form-item label="奖品序号">
-                        <el-input type="text" v-model="changeNumForm.id" :disabled="true" class="form_small"></el-input>
-                    </el-form-item>
-                    <el-form-item label="关联活动">
-                        <el-input type="text" v-model="changeNumForm.actName" :disabled="true" ></el-input>
-                    </el-form-item>
-                    <el-form-item label="名称" >
-                        <el-input type="text" v-model="changeNumForm.name" class="form_small"></el-input>
-                    </el-form-item>
-                    <el-form-item label="种类">
-                        <el-input type="text" v-model="changeNumForm.type" class="form_small"></el-input>
-                    </el-form-item>
-                    <el-form-item label="库存">
-                        <el-input type="text" v-model="changeNumForm.num" class="form_small"></el-input>
-                    </el-form-item>
-                    <el-form-item label="抽中概率">
-                        <el-input type="text" v-model="changeNumForm.ratio" class="form_small"></el-input>
-                    </el-form-item>
-                    <el-form-item label="奖品说明">
-                        <el-input type="text" v-model="changeNumForm.info" ></el-input>
-                    </el-form-item>
-                    <el-form-item label="兑奖时间">
-                        <el-input type="text" v-model="changeNumForm.duijiangTime" class="form_small"></el-input>
-                    </el-form-item>
-                    <el-form-item label="兑奖地点">
-                        <el-input type="text" v-model="changeNumForm.duijiangLoc" class="form_small"></el-input>
-                    </el-form-item>
-                    <el-form-item class="modal-btn-group">
-                        <el-button type="primary" @click="onChangeNumSubmit">提交</el-button>
-                        <el-button @click="closeChangeNumModal">取消</el-button>
-                    </el-form-item>
-                </el-form>
-            </div>
-        </modal>
         <!--抽奖活动模态框-->
-        <modal name="prize-modal" transition="pop-out" :height="680" :resizable="true" :pivotY="0.2">
+        <modal name="prize-modal" transition="pop-out" :height="720" :resizable="true" :pivotY="0.2">
             <div class="modal_close_btn">
                 <i class="el-icon-close" @click="closePrizeModal"></i>
             </div>
             <div class="modal-form">
                 <el-form ref="prizeForm" :model="prizeForm" :rules="rules" label-width="80px" >
+                    <el-form-item label="活动序号" prop="id">
+                        <el-input v-model="prizeForm.id"  class="form_middle "disabled></el-input>
+                    </el-form-item>
                     <el-form-item label="活动名称" prop="act_name">
                         <el-input v-model="prizeForm.act_name"  class="form_middle"></el-input>
                     </el-form-item>
                     <el-form-item label="起始时间" prop="begin">
-                        <el-date-picker v-model="tempBegin" type="datetime" placeholder="选择日期时间">
+                        <el-date-picker v-model="temBegin" type="datetime" placeholder="选择日期时间">
                         </el-date-picker>
                     </el-form-item>
                     <br/>
                     <el-form-item label="结束时间" prop="end">
-                        <el-date-picker v-model="tempEnd" type="datetime" placeholder="选择日期时间">
+                        <el-date-picker v-model="temEnd" type="datetime" placeholder="选择日期时间">
                         </el-date-picker>
                     </el-form-item>
                     <br/>
@@ -170,8 +63,8 @@
                     </el-form-item>
                     <el-form-item label="抽奖活动规则说明" prop="prizedecoration">
                         <span style="color: red">您在分段落换行时请添加&lt;br&nbsp;/&gt;符号</span>
+                        <br/>
                         <el-input
-                            class="form_small"
                             id="prizedecoration"
                             type="textarea"
                             :rows="2"
@@ -181,391 +74,266 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item class="modal-btn-group">
-                        <el-button type="primary" @click="onPrizeSubmit">发起抽奖</el-button>
+                        <el-button type="primary" @click="onPrizeSubmit">保存修改</el-button>
                         <el-button @click="closePrizeModal">取消</el-button>
                     </el-form-item>
                 </el-form>
             </div>
         </modal>
         <!--抽奖活动模态框结束-->
+        <el-table :data="tableData" border style="width: 100%">
+            <el-table-column prop="id" label="活动id" sortable>
+            </el-table-column>
+            <el-table-column prop="name" label="活动名称">
+            </el-table-column>
+            <el-table-column prop="begin" label="起始日期" sortable>
+            </el-table-column>
+            <el-table-column prop="end" label="结束日期" sortable>
+            </el-table-column>
+            <el-table-column label="操作">
+                <template scope="scope">
+                    <el-button size="small" type="success" @click="">用户管理</el-button>
+                    <el-button size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
+                    <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="pagination">
+            <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
+            </el-pagination>
+        </div>
     </div>
 </template>
 <script>
     import {
-        TransDetailDateToString,
-        TransDetailStringToDate
+        GetCurrentDate,
+        TransDateToString
     } from '../../util/date-helper.js';
-import FileUpload from 'vue-upload-component'
-import {
-    MessageBox
-} from 'element-ui';
-export default {
-    data() {
-        return {
-            files:[],
-            search_form: {
-                type:'',
-                actName:''
+    import {
+        TransDetailDateToString,
+        TransDetailStringToDate,
+    } from '../../util/date-helper.js';
+    import {
+        MessageBox
+    } from 'element-ui';
+    export default {
+        data() {
+            return {
+                search_form: {
+                    name: '',
+                    begin: '',
+                    end: ''
+                },
+                tempBegin: '',
+                tempEnd: '',
+                temBegin:'',
+                temEnd:'',
+                tableData: [],
+                pageSum: 10,
+                sum: 0,
+                cur_page: 1,
+                prizeForm: {
+                    act_name:'',
+                    begin:'',
+                    end:'',
+                    prize_num: '',
+                    share_num: true,
+                    prize_max_num:'',
+                    prizedecoration: '',
+                },
+                rules: {
+                    act_name:[{
+                        required:true,
+                        message:'请填写活动名称',
+                        trigger:'blur'
+                    }],
+                    begin: [{
+                        required: true,
+                        message: '请选择起始日期',
+                        trigger: 'blur'
+                    }],
+                    end: [{
+                        required: true,
+                        message: '请选择结束日期',
+                        trigger: 'blur'
+                    }],
+                    prize_num:[{
+                        required: true,
+                        message: '请设定每天抽奖次数',
+                        trigger: 'blur'
+                    }],
+                    prize_max_num:[{
+                        required: true,
+                        message: '请设定每天抽奖次数上限',
+                        trigger: 'blur'
+                    }],
+                    prizedecoration:[{
+                        required:true,
+                        message:'请填写抽奖规则',
+                        trigger:'blur'
+                    }]
+                }
+
+
+            }
+        },
+        watch: {
+            tempBegin: function(val) {
+                this.search_form.begin = TransDateToString(val);
             },
-            typeList: [],
-            actNameList:[],
-            changeNumForm: {
-                id: '',
-                num: ''
+            tempEnd: function(val) {
+                this.search_form.end = TransDateToString(val);
             },
-            tableData: [],
-             pageSum: 8,
-             sum: 0,
-             cur_page: 1,
-            loading: false,
-            tempBegin: '',
-            tempEnd: '',
-            prizeForm: {
-                act_name:'',
-                begin:'',
-                end:'',
-                prize_num: '',
-                share_num: true,
-                prize_max_num:'',
-                prizedecoration: '',
+            temBegin: function(val) {
+                this.prizeForm.begin = TransDetailDateToString(val);
             },
-            rules: {
-                act_name:[{
-                    required:true,
-                    message:'请填写活动名称',
-                    trigger:'blur'
-                }],
-                begin: [{
-                    required: true,
-                    message: '请选择起始日期',
-                    trigger: 'blur'
-                }],
-                end: [{
-                    required: true,
-                    message: '请选择结束日期',
-                    trigger: 'blur'
-                }],
-                prize_num:[{
-                    required: true,
-                    message: '请设定每天抽奖次数',
-                    trigger: 'blur'
-                }],
-                prize_max_num:[{
-                    required: true,
-                    message: '请设定每天抽奖次数上限',
-                    trigger: 'blur'
-                }],
-                prizedecoration:[{
-                    required:true,
-                    message:'请填写抽奖规则',
-                    trigger:'blur'
-                }]
-            }
+            temEnd: function(val) {
 
-        }
-    },
-    mounted() {
-        this.getSearch();
-    },
-    watch: {
-        tempBegin: function(val) {
-            this.prizeForm.begin = TransDetailDateToString(val);
+                this.prizeForm.end = TransDetailDateToString(val);
+            },
         },
-        tempEnd: function(val) {
-
-            this.prizeForm.end = TransDetailDateToString(val);
-        },
-    },
-    components: {
-        FileUpload
-    },
-    methods: {
-        //导入excel，模板
-        openMuban(){
-            window.open('/static/muban.xlsx','_self');
-        },
-        inputFilter(newFile, oldFile, prevent) {
-            if (newFile && !oldFile) {
-                // 添加文件前
-                // Filter system files or hide files
-                // 过滤系统文件 和隐藏文件
-                if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
-                    return prevent()
-                }
-                // Filter php html js file
-                // 过滤 php html js 文件
-                if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
-                    return prevent()
-                }
-            }
-        },
-
-        inputFile(newFile, oldFile) {
-            if (newFile && !oldFile) {
-                // add
-                console.log('add', newFile)
-            }
-            if (newFile && oldFile) {
-                // update
-                console.log('update', newFile)
-            }
-
-            if (!newFile && oldFile) {
-                // remove
-                console.log('remove', oldFile)
-            }
-            if (newFile && oldFile && !newFile.active && oldFile.active) {
-//                // 获得相应数据
-                console.log('response', newFile.response)
-                if (newFile.xhr) {
-                    //  获得响应状态码
-                    console.log('status', newFile.xhr.status)
-                }
-            }
-        },
-//导入excel，模板
-        //       发起投票模态框开始
-        openPrizeModal(){
-//            this.resetForm();
-            this.$modal.show('prize-modal');
-        },
-        closePrizeModal(){
-            this.$modal.hide('prize-modal');
-        },
-        onPrizeSubmit(){
-            const self=this;
-            self.$refs["prizeForm"].validate((valid) => {
-                if (valid) {
-                    if(self.prizeForm.begin>self.prizeForm.end){
-                        this.$message.error("请填写正确的活动起止时间!");
-                        return;
-                    }
-                    self.$axios({
-                        url:'/prize/post-prize-param',
-                        method:'post',
-                        params:{
-                            actName:self.prizeForm.act_name,
-                            begin:self.prizeForm.begin,
-                            end:self.prizeForm.end,
-                            prizeNum:parseInt(self.prizeForm.prize_num),
-                            shareNum:self.prizeForm.share_num,
-                            prizeMaxNum:parseInt(self.prizeForm.prize_max_num),
-                            prizeDecoration:self.prizeForm.prizedecoration,
-
-                        }
-                    })
-                        .then((res) => {
-                            if (res != null && res.data.result)
-                                self.$message('发起成功!');
-                            else
-                                self.$message.error("发起失败！");
-                            self.$modal.hide('prize-modal');
-                        })
-                }
-            })
-        },
-        //       发起投票模态框结束
-        handleCurrentChange(val) {
-            this.cur_page = val;
+        mounted() {
             this.getData();
         },
-        openChangeNumModal() {
-            this.$modal.show('change-num-modal');
-        },
-        closeChangeNumModal() {
-            this.$modal.hide('change-num-modal');
-        },
-        onChangeNumSubmit() {
-            var id = this.changeNumForm.id;
-            var actName=this.changeNumForm.actName;
-            var num = this.changeNumForm.num;
-            var name=this.changeNumForm.name;
-            var type=this.changeNumForm.type;
-            var ratio=this.changeNumForm.ratio;
-            var info=this.changeNumForm.info;
-            var duijiangTime=this.changeNumForm.duijiangTime;
-            var duijiangLoc=this.changeNumForm.duijiangLoc;
-            const self = this;
-            console.log(id + ":" + num);
-            self.$axios({
-                    url: '/prize/change-num',
-                    method: 'post',
-                    params: {
-                        id: id,
-                        num: num,
-                        actName: actName,
-                        name:name,
-                        type:type,
-                        ratio:ratio,
-                        info:info,
-                        duijiangTime:duijiangTime,
-                        duijiangLoc:duijiangLoc
+        methods: {
+            //       修改抽奖模态框开始
+            openPrizeModal(){
+                this.$modal.show('prize-modal');
+            },
+            closePrizeModal(){
+                this.$modal.hide('prize-modal');
+            },
+            onPrizeSubmit(){
+                const self=this;
+                self.$refs["prizeForm"].validate((valid) => {
+                    if (valid) {
+                        if(self.prizeForm.begin>self.prizeForm.end){
+                            this.$message.error("请填写正确的活动起止时间!");
+                            return;
+                        }
+                        self.$axios({
+                            url:'/prize/edit-prize-param',
+                            method:'post',
+                            params:{
+                                id:self.prizeForm.id,
+                                name:self.prizeForm.act_name,
+                                begin:self.prizeForm.begin,
+                                end:self.prizeForm.end,
+                                prizeNum:parseInt(self.prizeForm.prize_num),
+                                shareNum:self.prizeForm.share_num,
+                                prizeMaxNum:parseInt(self.prizeForm.prize_max_num),
+                                prizeDecoration:self.prizeForm.prizedecoration,
+
+                            }
+                        })
+                            .then((res) => {
+                                if (res != null && res.data.result){
+                                    self.$message('编辑成功!');
+                                    self.getData();
+                                }
+                                else
+                                    self.$message.error("编辑失败！");
+                                self.$modal.hide('prize-modal');
+                            })
                     }
                 })
-                .then((res) => {
-                    if (res != null && res.data.result) {
-                        self.getData();
-                        self.$message('修改成功!');
-                    } else
-                        self.$message.error("修改失败");
-                    self.$modal.hide('change-num-modal');
-                })
-        },
-        getSearch(){
-            const self=this;
-            self.$axios({
-                url:'prize/search',
-                method:'get'
-            })
-                .then((res)=>{
-                    if(res!=null){
-                        self.typeList=res.data.type;
-                        self.actNameList=res.data.actName;
-                    }
-                })
-        },
-        getData() {
-            const self = this;
-            var type=self.search_form.type;
-            console.log(self.search_form.type);
-            if(self.search_form.type==null){
-                type='';
-            }
-            console.log(type);
-            self.$axios({
-                    url: '/prize/list',
+
+            },
+            //       修改抽奖模态框结束
+            linkToOtherUrl(id, url) {
+                if (id == 0)
+                    this.$router.push(url + "0");
+                else
+                    this.$router.push(url + id);
+            },
+            handleCurrentChange(val) {
+                this.cur_page = val;
+                this.getData();
+            },
+            getData() {
+                const self = this;
+                var wsCache = window.$wsCache;
+                var username=wsCache.get("username");
+                self.$axios({
+                    url: '/prize/list-prize',
                     method: 'get',
                     params: {
-                        type: type,
-                        actName: self.search_form.actName,
+                        username:username,
+                        name: self.search_form.name,
+                        begin: self.search_form.begin,
+                        end: self.search_form.end,
                         curPage: self.cur_page,
                         pageSum: self.pageSum
                     }
                 })
-                .then((res) => {
-                    if (res != null) {
-                        self.tableData = res.data.list;
-                        self.sum = res.data.sum;
-                    }
-                })
-        },
-        searchHandle() {
-            this.getData();
-        },
-        handleDelete(id) {
-            const self = this;
-            MessageBox.confirm('确定删除？').then(function(action) {
-                self.$axios({
-                    url: '/prize/param/delete',
-                    method: 'post',
-                    data: {
-                        id: id
+                    .then((res) => {
+                        if (res != null) {
+                            self.tableData = res.data.list;
+                            self.sum = res.data.sum;
+                        }
+                    })
+            },
+            searchHandle() {
+                this.getData();
+            },
+            handleDelete(id) {
+                const self = this;
+                MessageBox.confirm('确定删除？').then(function(action) {
+                    self.$axios({
+                        url: '/prize/delete-prize-param',
+                        method: 'post',
+                        data: {
+                            id: id
+                        }
+                    })
+                        .then((res) => {
+                            if (res != null) {
+                                self.$message("删除成功");
+                                self.getData();
+                            }
+                        })
+                }).catch(function() {
+                    console.log("取消活动删除");
+                });
+
+            },
+            handleEdit(id) {
+                const self=this;
+                this.prizeForm.id=
+                this.prizeForm.act_name='',
+                this.temBegin='',
+                this.temEnd='',
+                this.prizeForm.prize_num='',
+                this.prizeForm.share_num='',
+                this.prizeForm.prize_max_num='',
+                this.prizeForm.prizedecoration='',
+                this.$axios({
+                    url:'/prize/get-prize-param',
+                    method:'get',
+                    params:{
+                        id:id,
                     }
                 })
                     .then((res) => {
-                        if (res != null) {
-                            self.$message("删除成功");
-                            self.getData();
-                        }
+                        this.prizeForm.id=res.data.id,
+                        this.prizeForm.act_name=res.data.name,
+                        this.temBegin=res.data.begin,
+                        this.temEnd=res.data.end,
+                        this.prizeForm.prize_num=res.data.prizeNum.toString(),
+                        this.prizeForm.share_num=res.data.shareNum,
+                        this.prizeForm.prize_max_num=res.data.prizeMaxNum.toString(),
+                        this.prizeForm.prizedecoration=res.data.prizeDecoration,
+                        this.openPrizeModal();
                     })
-            }).catch(function() {
-                console.log("取消活动删除");
-            });
-        },
-        handleEdit(row) {
-            this.changeNumForm.id = row.id;
-            this.changeNumForm.actName=row.actName;
-            this.changeNumForm.num = row.num;
-            this.changeNumForm.type=row.type;
-            this.changeNumForm.name=row.name;
-            this.changeNumForm.info=row.info;
-            this.changeNumForm.ratio=row.ratio;
-            this.changeNumForm.duijiangTime=row.duijiangTime;
-            this.changeNumForm.duijiangLoc=row.duijiangLoc;
-            this.openChangeNumModal();
-        },
+
+            },
+
+        }
     }
-}
 </script>
-
-<style scoped>
-    .btn-primary{color:#fff;background-color:#007bff;border-color:#007bff}
-    .btn-primary:hover{color:#fff;background-color:#0069d9;border-color:#0062cc}
-    .btn-primary.focus,.btn-primary:focus{box-shadow:0 0 0 3px rgba(0,123,255,.5)}
-    .btn-primary.disabled,.btn-primary:disabled{background-color:#007bff;border-color:#007bff}
-    .btn-primary.active,.btn-primary:active,.show>.btn-primary.dropdown-toggle{background-color:#0069d9;background-image:none;border-color:#0062cc}
-    .example-simple label.btn {
-        margin-bottom: 0;
-        margin-right: 1rem;
-    }
-    .btn-success,.btn-success:hover,.btn-success:focus {
-        color: #fff;
-        background-color: #28a745;
-        border-color: #28a745;
-    }
-    .file-uploads {
-    overflow: hidden;
-    position: relative;
-    text-align: center;
-    display: inline-block;
-    }
-
-    .btn-primary {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-    }
-
-    .btn {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: .5rem .75rem;
-    font-size: 1rem;
-    line-height: 1.25;
-    border-radius: .25rem;
-    transition: all .15s ease-in-out;
-    }
-    .file-uploads {
-        overflow: hidden;
-        position: relative;
-        text-align: center;
-        display: inline-block;
-    }
-    .file-uploads.file-uploads-html4 input[type="file"] {
-        opacity: 0;
-        font-size: 20em;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-    }
-    .file-uploads.file-uploads-html5 input[type="file"] {
-        overflow: hidden;
-        position: fixed;
-        width: 1px;
-        height: 1px;
-        z-index: -1;
-        opacity: 0;
-    }
-    .example-simple label.btn {
-        margin-bottom: 0;
-        margin-right: 1rem;
-    }
-    /*//抽奖*/
-    .top-btn-left{
-        float: left;
+<style type="text/css">
+    .search_input {
+        width: 150px!important;
     }
     .modal_close_btn {
         float: right;
@@ -575,18 +343,5 @@ export default {
     .el-icon-close:hover {
         color: #333;
         cursor: pointer;
-    }
-    .green{
-        color: #04be02;
-        width: 100%;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .modal-form {
-        margin-top: 40px;
-    }
-    #prizedecoration{
-        width: 450px!important;
-        height: 40px!important;
     }
 </style>

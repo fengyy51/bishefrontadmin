@@ -4,10 +4,10 @@
             <el-menu-item index="/notice">
                 <i class="fa fa-bullhorn" aria-hidden="true"></i>&nbsp;&nbsp;公告管理
             </el-menu-item>
-            <el-menu-item index="/shop-list">
-                <i class="fa fa-shopping-bag" aria-hidden="true"></i>&nbsp;&nbsp;店铺管理
-            </el-menu-item>
-            <el-submenu index="" >
+            <!--<el-menu-item index="/shop-list">-->
+                <!--<i class="fa fa-shopping-bag" aria-hidden="true"></i>&nbsp;&nbsp;店铺管理-->
+            <!--</el-menu-item>-->
+            <el-submenu index="1" >
                 <template  slot="title" ><i class="fa fa-calendar" aria-hidden="true" style="padding-left: 10px"></i>&nbsp;&nbsp;活动管理</template>
                 <el-menu-item index="/act-list/detail/0">
                     <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;发起活动
@@ -19,14 +19,18 @@
                     <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;&nbsp;自定义报名项
                 </el-menu-item>
                 <el-menu-item index="/item-list"><i class="fa fa-file-image-o" aria-hidden="true"></i>&nbsp;&nbsp;报名数据管理</el-menu-item>
-                <el-menu-item index="/prize"><i class="fa fa-gift" aria-hidden="true"></i>&nbsp;&nbsp;抽奖活动</el-menu-item>
+            </el-submenu>
+            <el-submenu index="2" >
+                <template  slot="title" ><i class="fa fa-calendar" aria-hidden="true" style="padding-left: 10px"></i>&nbsp;&nbsp;抽奖管理</template>
+                <el-menu-item index="/prize"><i class="fa fa-gift" aria-hidden="true"></i>&nbsp;&nbsp;发起抽奖</el-menu-item>
+                <el-menu-item index="/prize-list"><i class="fa fa-gift" aria-hidden="true"></i>&nbsp;&nbsp;抽奖活动列表</el-menu-item>
             </el-submenu>
             <!--             <el-menu-item index="/coupon">
                 <i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;&nbsp;优惠管理
             </el-menu-item> -->
-            <el-menu-item index="/map">
-                <i class="fa fa-map" aria-hidden="true"></i>&nbsp;&nbsp;地图 demo
-            </el-menu-item>
+            <!--<el-menu-item index="/map">-->
+                <!--<i class="fa fa-map" aria-hidden="true"></i>&nbsp;&nbsp;地图 demo-->
+            <!--</el-menu-item>-->
 
         </el-menu>
     </div>
