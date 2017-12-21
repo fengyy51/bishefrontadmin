@@ -154,6 +154,10 @@
                         </el-date-picker>
                     </el-form-item>
                     <br/>
+                    <el-form-item label="兑奖码" prop="code">
+                        <el-input v-model="prizeForm.code" class="form_middle"></el-input>
+                    </el-form-item>
+                    <br/>
                     <el-form-item label="每天抽奖次数" prop="prize_num">
                         <el-input v-model="prizeForm.prize_num"  class="form_small"></el-input>
                     </el-form-item>
@@ -225,6 +229,7 @@ export default {
                 act_name:'',
                 begin:'',
                 end:'',
+                code:'',
                 prize_num: '',
                 share_num: true,
                 prize_max_num:'',
@@ -244,6 +249,11 @@ export default {
                 end: [{
                     required: true,
                     message: '请选择结束日期',
+                    trigger: 'blur'
+                }],
+                code:[{
+                    required: true,
+                    message: '请填写兑奖码',
                     trigger: 'blur'
                 }],
                 prize_num:[{
@@ -330,6 +340,7 @@ export default {
             this.prizeForm.act_name='',
             this.tempBegin='',
             this.tempEnd='',
+            this.prizeForm.code='',
             this.prizeForm.prize_num='',
             this.prizeForm.share_num='',
             this.prizeForm.prize_max_num='',
@@ -356,6 +367,7 @@ export default {
                             name:self.prizeForm.act_name,
                             begin:self.prizeForm.begin,
                             end:self.prizeForm.begin,
+                            code:self.prizeForm.code,
                             prizeNum:parseInt(self.prizeForm.prize_num),
                             shareNum:self.prizeForm.share_num,
                             prizeMaxNum:parseInt(self.prizeForm.prize_max_num),
