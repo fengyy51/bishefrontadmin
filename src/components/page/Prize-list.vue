@@ -96,7 +96,7 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
-                    <el-button size="small" type="success" @click="">用户管理</el-button>
+                    <el-button size="small" type="success" @click="handleUser(scope.row.id)">用户管理</el-button>
                     <el-button size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
                     <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
                 </template>
@@ -340,7 +340,9 @@
                     })
 
             },
-
+            handleUser(id){
+                this.linkToOtherUrl(id,"/prize-list/user/");
+            },
         }
     }
 </script>

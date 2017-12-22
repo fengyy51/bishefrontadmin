@@ -33,7 +33,7 @@ var router = new Router({
                     component: resolve => require(['../components/page/Act-detail.vue'], resolve)
                 }, {
                     path: '/act-list/sign/:id',
-                    component: resolve => require(['../components/page/Act-sign.vue'], resolve)
+                    component: resolve => require(['../components/page/Act-user.vue'], resolve)
                 },
                 {
                 path: '/act-list',
@@ -62,6 +62,9 @@ var router = new Router({
             },{
                 path: '/prize-list',
                     component: resolve => require(['../components/page/Prize-list.vue'], resolve)
+                },{
+                    path: '/prize-list/user/:id',
+                    component: resolve => require(['../components/page/Prize-user.vue'], resolve)
                 },
             ],
         },
