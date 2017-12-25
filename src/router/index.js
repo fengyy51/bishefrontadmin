@@ -50,13 +50,21 @@ var router = new Router({
             }, {
                 path: '/shop-list/detail/:id',
                 component: resolve => require(['../components/page/Shop-detail.vue'], resolve)
-            },{
+            },
+                //活动列表
+                {
                     path: '/item-list',
                     component: resolve => require(['../components/page/Item-list.vue'], resolve)
-             },{
+             },
+                //发起投票
+                {
                 path: '/collect/:id',
                 component: resolve => require(['../components/page/Collect-list.vue'], resolve)
-            },
+            },//投票列表
+                {
+                    path: '/vote-list',
+                    component: resolve => require(['../components/page/Vote-list.vue'], resolve)
+                },
                 //发起抽奖
                 {
                     path: '/prize-launch/:id',

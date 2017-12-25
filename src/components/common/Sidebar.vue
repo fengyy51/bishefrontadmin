@@ -19,6 +19,7 @@
                     <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;&nbsp;自定义报名项
                 </el-menu-item>
                 <el-menu-item index="/item-list"><i class="fa fa-file-image-o" aria-hidden="true"></i>&nbsp;&nbsp;报名数据管理</el-menu-item>
+                <el-menu-item index="/vote-list"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;&nbsp;投票活动列表</el-menu-item>
             </el-submenu>
             <el-submenu index="2" >
                 <template  slot="title" ><i class="fa fa-gift" aria-hidden="true" style="padding-left: 10px"></i>&nbsp;&nbsp;抽奖管理</template>
