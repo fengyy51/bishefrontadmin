@@ -56,13 +56,24 @@ var router = new Router({
              },{
                 path: '/collect/:id',
                 component: resolve => require(['../components/page/Collect-list.vue'], resolve)
-            },{
+            },
+                //发起抽奖
+                {
+                    path: '/prize-launch/:id',
+                    component: resolve => require(['../components/page/Prize-launch.vue'], resolve)
+                },
+                //抽奖数据调整
+                {
                 path: '/prize',
                 component: resolve => require(['../components/page/Prize-detail.vue'], resolve)
-            },{
+            },
+                //抽奖列表
+                {
                 path: '/prize-list',
                     component: resolve => require(['../components/page/Prize-list.vue'], resolve)
-                },{
+                },
+                //抽奖活动用户管理
+                {
                     path: '/prize-list/user/:id',
                     component: resolve => require(['../components/page/Prize-user.vue'], resolve)
                 },

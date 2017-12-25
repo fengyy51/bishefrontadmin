@@ -390,7 +390,9 @@ export default {
                             self.actForm.cost = obj.cost.toString();
                             console.log(self.actForm.limitNum);
                             console.log(self.actForm.cost);
-                            self.actForm.broadCastImg = obj.broadCastImg;
+                            if(obj.broadCastImg!=null){
+                                self.actForm.broadCastImg = obj.broadCastImg;
+                            }
                             self.actForm.content = obj.content;
                             self.actForm.reg=obj.reg.split('@@@');
                             var regItem=obj.regItem.split('@@@');
@@ -440,7 +442,7 @@ export default {
                                         reg:reg,
                                         regItem:regItem,
                                         username:username
-                                    }
+                            }
                                 })
                                 .then((res) => {
                                     self.isBroadCastImgChange = false;

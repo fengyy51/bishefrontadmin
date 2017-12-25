@@ -43,22 +43,23 @@
         <div class="search_form">
             <el-form ref="search_form" :model="search_form"  >
                 <el-form-item class="top_search">
-                    <el-select v-model="search_form.type" placeholder="请选择奖项类型" >
-                        <el-option  :name="search_form.type" v-for="item in typeList"  :value="item"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item class="top_search">
                     <el-select v-model="search_form.actName" placeholder="请选择关联抽奖活动">
                         <el-option :name="search_form.actName" v-for="item in actNameList"  :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item class="top_search">
+                    <el-select v-model="search_form.type" placeholder="请选择奖项类型" >
+                        <el-option  :name="search_form.type" v-for="item in typeList"  :value="item"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item class="top_search">
+                    <el-input v-model="search_form.name" placeholder="请输入奖品名称"></el-input>
+                </el-form-item>
+
+                <el-form-item class="top_search">
                     <el-button type="success" @click="searchHandle">搜索</el-button>
                 </el-form-item>
             </el-form>
-        </div>
-        <div class="top-btn top-btn-left">
-            <el-button type="primary" @click="openPrizeModal">发起抽奖</el-button>
         </div>
         <!--<div class="top-btn">-->
             <!--<el-button type="primary" @click="openChangeNumModal">修改数量</el-button>-->
@@ -107,7 +108,7 @@
                         <el-input type="text" v-model="changeNumForm.actName" :disabled="true" ></el-input>
                     </el-form-item>
                     <el-form-item label="名称" >
-                        <el-input type="text" v-model="changeNumForm.name" class="form_small"></el-input>
+                        <el-input type="text" v-model="changeNumForm.name" class="form_middle"></el-input>
                     </el-form-item>
                     <el-form-item label="种类">
                         <el-input type="text" v-model="changeNumForm.type" class="form_small"></el-input>
@@ -122,10 +123,10 @@
                         <el-input type="text" v-model="changeNumForm.info" ></el-input>
                     </el-form-item>
                     <el-form-item label="兑奖时间">
-                        <el-input type="text" v-model="changeNumForm.duijiangTime" class="form_small"></el-input>
+                        <el-input type="text" v-model="changeNumForm.duijiangTime" class="form_middle"></el-input>
                     </el-form-item>
                     <el-form-item label="兑奖地点">
-                        <el-input type="text" v-model="changeNumForm.duijiangLoc" class="form_small"></el-input>
+                        <el-input type="text" v-model="changeNumForm.duijiangLoc" class="form_middle"></el-input>
                     </el-form-item>
                     <el-form-item class="modal-btn-group">
                         <el-button type="primary" @click="onChangeNumSubmit">提交</el-button>
@@ -134,65 +135,6 @@
                 </el-form>
             </div>
         </modal>
-        <!--抽奖活动模态框-->
-        <modal name="prize-modal" transition="pop-out" :height="680" :resizable="true" :pivotY="0.2">
-            <div class="modal_close_btn">
-                <i class="el-icon-close" @click="closePrizeModal"></i>
-            </div>
-            <div class="modal-form">
-                <el-form ref="prizeForm" :model="prizeForm" :rules="rules" label-width="80px" >
-                    <el-form-item label="活动名称" prop="act_name">
-                        <el-input v-model="prizeForm.act_name"  class="form_middle"></el-input>
-                    </el-form-item>
-                    <el-form-item label="起始时间" prop="begin">
-                        <el-date-picker v-model="tempBegin" type="datetime" placeholder="选择日期时间">
-                        </el-date-picker>
-                    </el-form-item>
-                    <br/>
-                    <el-form-item label="结束时间" prop="end">
-                        <el-date-picker v-model="tempEnd" type="datetime" placeholder="选择日期时间">
-                        </el-date-picker>
-                    </el-form-item>
-                    <br/>
-                    <el-form-item label="兑奖码" prop="code">
-                        <el-input v-model="prizeForm.code" class="form_middle"></el-input>
-                    </el-form-item>
-                    <br/>
-                    <el-form-item label="每天抽奖次数" prop="prize_num">
-                        <el-input v-model="prizeForm.prize_num"  class="form_small"></el-input>
-                    </el-form-item>
-                    <el-form-item label="分享是否增加次数" prop="share_num">
-                        <el-switch
-                            v-model="prizeForm.share_num"
-                            on-text="是" off-text="否"
-                            on-color="#13ce66"
-                            off-color="#ff4949">
-                        </el-switch>
-                    </el-form-item>
-                    <el-form-item label="每天抽奖次数上限" prop="prize_max_num">
-                        <el-input v-model="prizeForm.prize_max_num"  class="form_small"></el-input>
-                    </el-form-item>
-                    <el-form-item label="抽奖活动规则说明" prop="prizedecoration">
-                        <span style="color: red">您在分段落换行时请添加&lt;br&nbsp;/&gt;符号</span>
-                        <br/>
-                        <el-input
-                            class="form_small"
-                            id="prizedecoration"
-                            type="textarea"
-                            :rows="2"
-                            :autosize="true"
-                            placeholder="请输入抽奖规则说明"
-                            v-model="prizeForm.prizedecoration">
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item class="modal-btn-group">
-                        <el-button type="primary" @click="onPrizeSubmit">发起抽奖</el-button>
-                        <el-button @click="closePrizeModal">取消</el-button>
-                    </el-form-item>
-                </el-form>
-            </div>
-        </modal>
-        <!--抽奖活动模态框结束-->
     </div>
 </template>
 <script>
@@ -209,6 +151,7 @@ export default {
         return {
             files:[],
             search_form: {
+                name:'',
                 type:'',
                 actName:''
             },
@@ -223,69 +166,11 @@ export default {
              sum: 0,
              cur_page: 1,
             loading: false,
-            tempBegin: '',
-            tempEnd: '',
-            prizeForm: {
-                act_name:'',
-                begin:'',
-                end:'',
-                code:'',
-                prize_num: '',
-                share_num: true,
-                prize_max_num:'',
-                prizedecoration: '',
-            },
-            rules: {
-                act_name:[{
-                    required:true,
-                    message:'请填写活动名称',
-                    trigger:'blur'
-                }],
-                begin: [{
-                    required: true,
-                    message: '请选择起始日期',
-                    trigger: 'blur'
-                }],
-                end: [{
-                    required: true,
-                    message: '请选择结束日期',
-                    trigger: 'blur'
-                }],
-                code:[{
-                    required: true,
-                    message: '请填写兑奖码',
-                    trigger: 'blur'
-                }],
-                prize_num:[{
-                    required: true,
-                    message: '请设定每天抽奖次数',
-                    trigger: 'blur'
-                }],
-                prize_max_num:[{
-                    required: true,
-                    message: '请设定每天抽奖次数上限',
-                    trigger: 'blur'
-                }],
-                prizedecoration:[{
-                    required:true,
-                    message:'请填写抽奖规则',
-                    trigger:'blur'
-                }]
-            }
 
         }
     },
     mounted() {
         this.getSearch();
-    },
-    watch: {
-        tempBegin: function(val) {
-            this.prizeForm.begin = TransDetailDateToString(val);
-        },
-        tempEnd: function(val) {
-
-            this.prizeForm.end = TransDetailDateToString(val);
-        },
     },
     components: {
         FileUpload
@@ -335,58 +220,7 @@ export default {
             }
         },
 //导入excel，模板
-        //       发起抽奖模态框开始
-        openPrizeModal(){
-            this.prizeForm.act_name='',
-            this.tempBegin='',
-            this.tempEnd='',
-            this.prizeForm.code='',
-            this.prizeForm.prize_num='',
-            this.prizeForm.share_num='',
-            this.prizeForm.prize_max_num='',
-            this.prizeForm.prizedecoration='',
-            this.$modal.show('prize-modal');
-        },
-        closePrizeModal(){
-            this.$modal.hide('prize-modal');
-        },
-        onPrizeSubmit(){
-            const self=this;
-            var wsCache = window.$wsCache;
-            var username=wsCache.get("username");
-            self.$refs["prizeForm"].validate((valid) => {
-                if (valid) {
-                    if(self.prizeForm.begin>self.prizeForm.end){
-                        this.$message.error("请填写正确的活动起止时间!");
-                        return;
-                    }
-                    self.$axios({
-                        url:'/prize/post-prize-param',
-                        method:'post',
-                        params:{
-                            name:self.prizeForm.act_name,
-                            begin:self.prizeForm.begin,
-                            end:self.prizeForm.begin,
-                            code:self.prizeForm.code,
-                            prizeNum:parseInt(self.prizeForm.prize_num),
-                            shareNum:self.prizeForm.share_num,
-                            prizeMaxNum:parseInt(self.prizeForm.prize_max_num),
-                            prizeDecoration:self.prizeForm.prizedecoration,
-                            username:username
 
-                        }
-                    })
-                        .then((res) => {
-                            if (res != null && res.data.result)
-                                self.$message('发起成功!');
-                            else
-                                self.$message.error("发起失败！");
-                            self.$modal.hide('prize-modal');
-                        })
-                }
-            })
-        },
-        //       发起投票模态框结束
         handleCurrentChange(val) {
             this.cur_page = val;
             this.getData();
@@ -453,23 +287,28 @@ export default {
             if(self.search_form.type==null){
                 type='';
             }
-            console.log(type);
-            self.$axios({
+            if(self.search_form.actName==''){
+                self.$message.info("请选择关联的抽奖活动！");
+            }else{
+                self.$axios({
                     url: '/prize/list',
                     method: 'get',
                     params: {
+                        name:self.search_form.name,
                         type: type,
                         actName: self.search_form.actName,
                         curPage: self.cur_page,
                         pageSum: self.pageSum
                     }
                 })
-                .then((res) => {
-                    if (res != null) {
-                        self.tableData = res.data.list;
-                        self.sum = res.data.sum;
-                    }
-                })
+                    .then((res) => {
+                        if (res != null) {
+                            self.tableData = res.data.list;
+                            self.sum = res.data.sum;
+                        }
+                    })
+            }
+
         },
         searchHandle() {
             this.getData();

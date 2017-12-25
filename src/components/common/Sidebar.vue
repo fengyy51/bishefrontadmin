@@ -21,9 +21,10 @@
                 <el-menu-item index="/item-list"><i class="fa fa-file-image-o" aria-hidden="true"></i>&nbsp;&nbsp;报名数据管理</el-menu-item>
             </el-submenu>
             <el-submenu index="2" >
-                <template  slot="title" ><i class="fa fa-calendar" aria-hidden="true" style="padding-left: 10px"></i>&nbsp;&nbsp;抽奖管理</template>
-                <el-menu-item index="/prize"><i class="fa fa-gift" aria-hidden="true"></i>&nbsp;&nbsp;发起抽奖</el-menu-item>
-                <el-menu-item index="/prize-list"><i class="fa fa-gift" aria-hidden="true"></i>&nbsp;&nbsp;抽奖活动列表</el-menu-item>
+                <template  slot="title" ><i class="fa fa-gift" aria-hidden="true" style="padding-left: 10px"></i>&nbsp;&nbsp;抽奖管理</template>
+                <el-menu-item index="/prize-launch/0"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;发起抽奖</el-menu-item>
+                <el-menu-item index="/prize"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;抽奖数据管理</el-menu-item>
+                <el-menu-item index="/prize-list"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;&nbsp;抽奖活动列表</el-menu-item>
             </el-submenu>
             <!--             <el-menu-item index="/coupon">
                 <i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;&nbsp;优惠管理
