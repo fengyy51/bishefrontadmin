@@ -69,6 +69,10 @@
                     <SingleImg :img="prizeForm.prizelistImg" :actionUrl="imgUploadUrl" v-on:imgChange="prizelistImgChange" v-on:handleChange="handlePrizelistImgChange"></SingleImg>
                 </el-form-item>
                 <br/>
+                <el-form-item label="背景颜色">
+                    <colorPicker v-model="prizeForm.color" v-on:change="headleChangeColor"></colorPicker>
+                </el-form-item>
+                <br/>
                 <el-form-item class="submit_center_btn_form">
                     <el-button type="primary" @click="onSubmit" size="large" icon="edit">{{ type_name }}</el-button>
                 </el-form-item>
@@ -115,6 +119,7 @@
                     prizedecoration: '',
                     topImg: "",
                     prizelistImg:"",
+                    color: '#f00',//背景颜色
                 },
                 rules: {
                     act_name: [{
@@ -196,6 +201,9 @@
                 else
                     this.$router.push(url + id);
             },
+            headleChangeColor (color) {
+                this.prizeForm.color=color;
+            },
             onSubmit() {
                 const self=this;
                 var wsCache = window.$wsCache;
@@ -222,6 +230,7 @@
                                     username: username,
                                     topImg: self.prizeForm.topImg,
                                     prizelistImg: self.prizeForm.prizelistImg,
+                                    color:self.prizeForm.color,
 
                                 }
                             })
@@ -249,7 +258,7 @@
                                     prizeDecoration:self.prizeForm.prizedecoration,
                                     topImg: self.prizeForm.topImg,
                                     prizelistImg: self.prizeForm.prizelistImg,
-
+                                    color:self.prizeForm.color,
                                 }
                             })
                                 .then((res) => {
@@ -300,6 +309,9 @@
                             }
                             if(res.data.prizelistImg!=null){
                                 this.prizeForm.prizelistImg=res.data.prizelistImg;
+                            }
+                            if(res.data.color!=null){
+                                this.prizeForm.color=res.data.color;
                             }
 
                     })
