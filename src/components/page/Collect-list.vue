@@ -385,10 +385,13 @@ export default {
                         this.$message.error("请填写正确的活动起止时间!");
                         return;
                     }
+                    var wsCache = window.$wsCache;
+                    var username=wsCache.get("username");
                     self.$axios({
                         url:'/collect/post-vote',
                         method:'post',
                         params:{
+                            username:username,
                             actId:actId,
                             actName:self.voteForm.act_name,
                             begin:self.voteForm.begin,

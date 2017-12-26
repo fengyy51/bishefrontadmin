@@ -5,7 +5,7 @@
                 <el-breadcrumb-item :to="{ path: '/prize-list/' }">
                     <i class="el-icon-date"></i>抽奖活动管理
                 </el-breadcrumb-item>
-                <el-breadcrumb-item >我发起的抽奖活动</el-breadcrumb-item>
+                <el-breadcrumb-item >我发起的投票活动</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="search_form">
@@ -31,6 +31,9 @@
             </div>
             <div class="modal-form">
                 <el-form ref="voteForm" :model="voteForm" :rules="rules" label-width="80px" >
+                    <el-form-item label="活动序号" prop="id" style="display: none">
+                        <el-input v-model="voteForm.id"  class="form_middle" ></el-input>
+                    </el-form-item>
                     <el-form-item label="活动名称" prop="act_name">
                         <el-input v-model="voteForm.act_name"  class="form_middle"></el-input>
                     </el-form-item>
@@ -61,10 +64,12 @@
                     <el-form-item label="每天投票次数上限" prop="vote_max_num">
                         <el-input v-model="voteForm.vote_max_num"  class="form_small"></el-input>
                     </el-form-item>
+                    <br/>
                     <el-form-item label="投票活动规则说明" prop="votedecoration">
                         <span style="color: red">您在分段落换行时请添加&lt;br&nbsp;/&gt;符号</span>
+                        <br/>
                         <el-input
-                            class="form_small"
+                            class="form_middle"
                             id="votedecoration"
                             type="textarea"
                             :rows="2"
@@ -74,7 +79,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item class="modal-btn-group">
-                        <el-button type="primary" @click="onVoteSubmit">发起投票</el-button>
+                        <el-button type="primary" @click="onVoteSubmit">修改设置</el-button>
                         <el-button @click="closeVoteModal">取消</el-button>
                     </el-form-item>
                 </el-form>
@@ -92,7 +97,7 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
-                    <el-button size="small" type="success" @click="handleUser(scope.row.id)">用户管理</el-button>
+                    <el-button size="small" type="success" @click="handleResult(scope.row.id)">投票结果管理</el-button>
                     <el-button size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
                     <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
                 </template>
@@ -133,6 +138,7 @@
                 sum: 0,
                 cur_page: 1,
                 voteForm: {
+                    id:'',
                     act_name:'',
                     begin:'',
                     end:'',
@@ -214,14 +220,12 @@
                 this.getData();
             },
             openVoteModal(){
-//            this.resetForm();
                 this.$modal.show('vote-modal');
             },
             closeVoteModal(){
                 this.$modal.hide('vote-modal');
             },
             onVoteSubmit(){
-                var actId = this.$route.params.id;
                 const self=this;
                 self.$refs["voteForm"].validate((valid) => {
                     if (valid) {
@@ -229,11 +233,12 @@
                             this.$message.error("请填写正确的活动起止时间!");
                             return;
                         }
+                        console.log(self.voteForm.id);
                         self.$axios({
-                            url:'/collect/post-vote',
+                            url:'/collect/vote-param-edit',
                             method:'post',
                             params:{
-                                actId:actId,
+                                id:parseInt(self.voteForm.id),
                                 actName:self.voteForm.act_name,
                                 begin:self.voteForm.begin,
                                 end:self.voteForm.end,
@@ -242,15 +247,13 @@
                                 shareNum:self.voteForm.share_num,
                                 voteMaxNum:parseInt(self.voteForm.vote_max_num),
                                 voteDecoration:self.voteForm.votedecoration,
-                                proApproved:parseInt(self.approved_num),
-
                             }
                         })
                             .then((res) => {
                                 if (res != null && res.data.result)
-                                    self.$message('发起成功!');
+                                    self.$message('修改成功!');
                                 else
-                                    self.$message.error("发起失败！");
+                                    self.$message.error("修改失败！");
                                 self.$modal.hide('vote-modal');
                             })
                     }
@@ -286,7 +289,7 @@
                 const self = this;
                 MessageBox.confirm('确定删除？').then(function(action) {
                     self.$axios({
-                        url: '/prize/delete-prize-param',
+                        url: '/collect/vote-param-delete',
                         method: 'post',
                         data: {
                             id: id
@@ -299,16 +302,40 @@
                             }
                         })
                 }).catch(function() {
-                    console.log("取消活动删除");
+                    console.log("取消投票活动删除");
                 });
 
             },
             handleEdit(id) {
-                this.linkToOtherUrl(id,"/prize-launch/");
+                const self=this;
+                self.$axios({
+                    url: '/collect/vote-param-get',
+                    method: 'get',
+                    params: {
+                        id:id
+                    }
+                })
+                    .then((res) => {
+                        if (res != null) {
+                            self.voteForm.id=id;
+                            self.voteForm.act_name=res.data.actName;
+                            self.tempBegin=res.data.begin;
+                            self.tempEnd=res.data.end;
+                            self.voteForm.begin=res.data.begin;
+                            self.voteForm.end=res.data.end;
+                            self.voteForm.pro_num=res.data.proNum.toString();
+                            self.voteForm.vote_num=res.data.voteNum.toString();
+                            self.voteForm.share_num=res.data.shareNum;
+                            self.voteForm.vote_max_num=res.data.voteMaxNum.toString();
+                            self.voteForm.votedecoration=res.data.voteDecoration;
+                            self.openVoteModal();
+                        }
+                    })
+
             },
-            handleUser(id){
-                this.linkToOtherUrl(id,"/prize-list/user/");
-            },
+            handleResult(id){
+                this.linkToOtherUrl(id,"/vote-list/result/");
+            }
         }
     }
 </script>
