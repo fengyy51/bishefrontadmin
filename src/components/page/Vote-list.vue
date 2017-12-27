@@ -2,8 +2,8 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item :to="{ path: '/prize-list/' }">
-                    <i class="el-icon-date"></i>抽奖活动管理
+                <el-breadcrumb-item :to="{ path: '/vote-list/' }">
+                    <i class="el-icon-date"></i>投票活动管理
                 </el-breadcrumb-item>
                 <el-breadcrumb-item >我发起的投票活动</el-breadcrumb-item>
             </el-breadcrumb>
@@ -87,7 +87,7 @@
         </modal>
         <!--投票活动模态框结束-->
         <el-table :data="tableData" border style="width: 100%">
-            <el-table-column prop="id" label="活动id" sortable>
+            <el-table-column prop="id" label="投票活动序号" sortable>
             </el-table-column>
             <el-table-column prop="actName" label="活动名称">
             </el-table-column>
@@ -208,7 +208,6 @@
             this.getData();
         },
         methods: {
-            //       修改抽奖模态框结束
             linkToOtherUrl(id, url) {
                 if (id == 0)
                     this.$router.push(url + "0");
