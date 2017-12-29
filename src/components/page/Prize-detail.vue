@@ -269,9 +269,14 @@ export default {
         },
         getSearch(){
             const self=this;
+            var wsCache = window.$wsCache;
+            var username=wsCache.get("username");
             self.$axios({
                 url:'prize/search',
-                method:'get'
+                method:'get',
+                params:{
+                    username:username
+                }
             })
                 .then((res)=>{
                     if(res!=null){

@@ -90,6 +90,11 @@ var router = new Router({
                     path: '/prize-list/user/:id',
                     component: resolve => require(['../components/page/Prize-user.vue'], resolve)
                 },
+                //刷票分析
+                {
+                    path: '/vote-brush',
+                    component: resolve => require(['../components/page/Vote-brush.vue'], resolve)
+                },
             ],
         },
         {
