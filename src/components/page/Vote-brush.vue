@@ -40,12 +40,13 @@
                     <el-input v-model="search_form.num" class="search_input" placeholder="输入票数上限"></el-input>
                 </el-form-item>
                 <el-form-item class="top_search">
-                    <el-button type="success" @click="searchHandle">搜索</el-button>
+                    <el-button type="success" @click="searchHandle">查看具体数据</el-button>
+                    <el-button type="success" @click="searchHandleNum">查看统计个数</el-button>
                 </el-form-item>
                 <el-tag type="danger" class="collect_top_tag">共{{sum}}个结果</el-tag>
             </el-form>
         </div>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table :data="tableData" border style="width: 100%;display: none;" id="detailtable">
             <el-table-column prop="id" label="投票活动序号" sortable>
             </el-table-column>
             <el-table-column prop="ip" label="ip地址" :formatter="formatter_ip"sortable>
@@ -64,8 +65,23 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pagination">
+        <div class="pagination" id="detailpagination"  style="display: none;" >
             <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
+            </el-pagination>
+        </div>
+        <el-table :data="numtableData" border style="width: 100%;display: none;" id="numtable">
+            <el-table-column prop="id" label="投票选择序号" sortable>
+            </el-table-column>
+            <el-table-column prop="num" label="时间区间内投票个数" :formatter="formatter_num"sortable>
+            </el-table-column>
+            <el-table-column label="操作">
+                <template scope="scope">
+                    <el-button size="small" type="success" @click="handleResult(scope.row.id)">查看投票结果</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="pagination" id="numpagination"  style="display: none;" >
+            <el-pagination @current-change="handleCurrentChangeNum" :pageSize="numpageSum" layout="prev, pager, next" :total="numsum">
             </el-pagination>
         </div>
     </div>
@@ -96,32 +112,36 @@
                 tempBegin: '',
                 tempEnd: '',
                 tableData: [],
+                numtableData:[],
+                numpageSum:5,
                 pageSum: 5,
                 sum: 0,
+                numsum:0,
                 cur_page: 1,
+                numcur_page:1,
                 actNameList:[],
-                options: [{
-                    label: '1秒',
-                    value: '1',
-                }, {
-                    label: '1分钟',
-                    value:'60',
-                }, {
-                    label: '5分钟',
-                    value:'300'
-                }, {
-                    label: '10分钟',
-                    value:'600'
-                }, {
-                    label: '30分钟',
-                    value:'1800'
-                }, {
-                    label: '1小时',
-                    value:'3600'
-                }, {
-                    label: '1天',
-                    value:'86400'
-                }],
+//                options: [{
+//                    label: '1秒',
+//                    value: '1',
+//                }, {
+//                    label: '1分钟',
+//                    value:'60',
+//                }, {
+//                    label: '5分钟',
+//                    value:'300'
+//                }, {
+//                    label: '10分钟',
+//                    value:'600'
+//                }, {
+//                    label: '30分钟',
+//                    value:'1800'
+//                }, {
+//                    label: '1小时',
+//                    value:'3600'
+//                }, {
+//                    label: '1天',
+//                    value:'86400'
+//                }],
                 rules: {
                     actName: [{
                         required: true,
@@ -166,6 +186,9 @@
             formatter_ip(row,column){
                 return row.ip;
             },
+            formatter_num(row,column){
+                return row.num;
+            },
             getSearch(){
                 const self=this;
                 var wsCache = window.$wsCache;
@@ -184,6 +207,9 @@
                         }
                     })
             },
+            searchHandleNum(){
+                this.getNumData();
+            },
             searchHandle() {
                 this.getData();
             },
@@ -191,10 +217,55 @@
                 this.cur_page = val;
                 this.getData();
             },
+            handleCurrentChangeNum(val) {
+                this.numcur_page = val;
+                this.getNumData();
+            },
+            getNumData() {
+                const self = this;
+                self.$refs["search_form"].validate((valid) => {
+                    if (valid) {
+                        document.getElementById("detailtable").style.display='none';
+                        document.getElementById("detailpagination").style.display='none';
+                        document.getElementById("numtable").style.display='block';
+                        document.getElementById("numpagination").style.display='block';
+                        var id = self.search_form.id;
+                        var num=self.search_form.num;
+                        if(id==''){
+                            id=-1;
+                        }
+                        self.$axios({
+                            url: '/collect/brush-list-num',
+                            method: 'get',
+                            params: {
+                                id:id,
+                                actName: self.search_form.actName,
+//                              /interval: parseInt(self.search_form.interval),
+                                begin: self.search_form.begin,
+                                end: self.search_form.end,
+                                num:num,
+                                curPage: self.numcur_page,
+                                pageSum: self.numpageSum
+                            }
+                        })
+                            .then((res) => {
+                                if (res != null) {
+                                    self.numtableData = res.data.list;
+                                    self.numsum = res.data.sum;
+                                }
+                            })
+                    }
+
+                })
+            },
             getData() {
                 const self = this;
                 self.$refs["search_form"].validate((valid) => {
                     if (valid) {
+                        document.getElementById("detailtable").style.display='block';
+                        document.getElementById("detailpagination").style.display='block';
+                        document.getElementById("numtable").style.display='none';
+                        document.getElementById("numpagination").style.display='none';
                         var id = self.search_form.id;
                         var num=self.search_form.num;
                         if(id==''){
