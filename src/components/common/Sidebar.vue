@@ -30,7 +30,7 @@
             <el-submenu index="3" >
                 <template  slot="title" ><i class="fa fa-database" aria-hidden="true" style="padding-left: 10px"></i>&nbsp;&nbsp;统计与分析</template>
                 <el-menu-item index="/vote-brush"><i class="fa fa-ticket" aria-hidden="true"></i>&nbsp;&nbsp;刷票统计</el-menu-item>
-                <el-menu-item index=""><i class="fa fa-bar-chart" aria-hidden="true"></i>&nbsp;&nbsp;用户行为习惯分析</el-menu-item>
+                <el-menu-item index="/user-behavior"><i class="fa fa-bar-chart" aria-hidden="true"></i>&nbsp;&nbsp;用户行为习惯分析</el-menu-item>
             </el-submenu>
             <!--             <el-menu-item index="/coupon">
                 <i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;&nbsp;优惠管理

@@ -95,6 +95,11 @@ var router = new Router({
                     path: '/vote-brush',
                     component: resolve => require(['../components/page/Vote-brush.vue'], resolve)
                 },
+                //用户行为分析
+                {
+                    path:'/user-behavior',
+                    component:resolve=>require(['../components/page/User-behavior.vue'],resolve)
+                },
             ],
         },
         {

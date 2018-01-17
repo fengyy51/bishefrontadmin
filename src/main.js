@@ -8,6 +8,7 @@ import wsCache from 'web-storage-cache';
 import vmodal from 'vue-js-modal';
 import fileupload from 'vue-upload-component';
 import colorPicker from './util/vue-color-picker'
+import echarts from 'echarts'
 import 'element-ui/lib/theme-default/index.css';
 import "babel-polyfill";
 import './mock/index.js';
@@ -20,6 +21,7 @@ Vue.use(colorPicker);
 Vue.prototype.$wsCache = new wsCache();
 window.$wsCache = new wsCache();
 Vue.prototype.$axios = axios;
+Vue.prototype.$echarts=echarts
 /*vue.2.0的渲染过程：
 
 1.首先需要了解这是 es 6 的语法，表示 Vue 实例选项对象的 render 方法作为一个函数，接受传入的参数 h 函数，返回 h(App) 的函数调用结果。
