@@ -33,7 +33,10 @@ module.exports = {
       'vue$': 'vue/dist/vue.common.js',
       'src': resolve('src'),
       'assets': resolve('src/assets'),
-      'components': resolve('src/components')
+      'components': resolve('src/components'),
+       'jquery':'jquery',
+        'jquery':resolve('/node_modules/jquery/src/jquery')
+
     }
   },
   // 加载器
@@ -66,6 +69,12 @@ module.exports = {
       }
     ]
   },
+    plugins: [
+        new webpack.ProvidePlugin({
+            $:"jquery",
+            jQuery:"jquery"
+        })
+    ]
     // plugins: [
     //     new webpack.DllReferencePlugin({
     //       context: path.resolve(__dirname, '..'),

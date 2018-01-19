@@ -5,22 +5,40 @@
 </template>
 
 <script>
+    import $ from 'jquery'
     const echarts = require('echarts');
     export default {
-        name: 'line-chart',
-        data () {
-            return {
-                list:['']
-            }
-        },
         mounted() {
             //基于准备好的dom, 初始化echarts实例
+            var d = [];
+            $.ajax({
+                url:"http://localhost:8083/analysis/user-prize",
+                crossDomain: true,
+                async:false,
+                xhrFields: {
+                    'Access-Control-Allow-Origin': 'localhost:8083'
+                },
+                success:function (data) {
+                    var res=data.data;
+//                    console.log(new Date(parseInt(res[0].addtime*1000)).getHours()+":"+new Date(parseInt(res[0].addtime*1000)).getMinutes()+":"+new Date(parseInt(res[0].addtime*1000)).getSeconds());
+                    for(var i=0;i<res.length;i++){
+
+                        d.push([
+                            new Date(parseInt((res[i].addtime)*1000)),
+//                            new Date().setTime(res[i].addtime*1000),
+                            res[i].num
+                        ])
+                    }
+
+                }
+            });
             let myChart = echarts.init(document.getElementById('echartContainer'));
             myChart.setOption({
                 title : {
                     text : '用户行为分析',
                     subtext : '抽奖时间分析'
                 },
+                //坐标指示轴
                 tooltip : {
                     trigger: 'axis',
                     axisPointer:{
@@ -30,114 +48,109 @@
                             type : 'dashed',
                             width : 1
                         }
+                    },
+                    //格式化坐标指示轴显示的文字
+                    formatter: function (params) {
+                        var date=params[0].value[0];
+                        var time = date.getFullYear() + '-'
+                            + (date.getMonth() + 1) + '-'
+                                    + date.getDate() + ' '
+                                    + date.getHours() + ':'
+                                    + date.getMinutes();
+                        return '('+
+                            time+
+                            ')<br/>'
+                            + '数量: '+params[0].value[1]
                     }
                 },
+                //工具栏
                 toolbox: {
                     show : true,
                     feature : {
                         mark : {show: true},
                         dataView : {show: true, readOnly: false},
-                        restore : {show: true},
+//                        restore : {show: true},
                         saveAsImage : {show: true}
                     }
                 },
+                //start end 数据窗口范围的起始结束百分比
                 dataZoom: {
                     show: true,
-                    start : 30,
-                    end : 70
+//                    showDetail:true,
+//                    start : 30.68,
+//                    end : 31.101,
+                    start : 25.32,
+                    end : 37.775,
+                    zoomLock:true
                 },
+                //顶部图例
                 legend : {
                     data : ['series1']
                 },
+                //x y水平与垂直安放位置 图例
                 dataRange: {
-                    min: 0,
-                    max: 100,
+//                    min: 0,
+//                    max: 15,
                     orient: 'horizontal',
-                    y: 30,
+                    y: 5,
                     x: 'center',
-                    //text:['高','低'],           // 文本，默认为数值文本
+//                    text:['高','低'],           // 文本，默认为数值文本
                     color:['lightgreen','orange'],
-                    splitNumber: 5
+//                    splitNumber: 15
                 },
+                //直角坐标系内绘图网格右下角纵坐标
                 grid: {
-                    y2: 80
+                    y2: 100
                 },
+                //splitNum分割段数
                 xAxis : [
                     {
                         type : 'time',
-                        splitNumber:10
+                        splitNumber:5
                     }
                 ],
-                yAxis : [
-                    {
-                        type : 'value'
-                    }
-                ],
+                yAxis : {
+                    min: 0,
+                    max: 15,
+                    type : 'value'
+                },
                 animation: false,
+                //散点图
                 series : [
                     {
-                        name:'series1',
-                        type:'scatter',
+                        name: '数量',
+                        type: 'scatter',
                         tooltip : {
                             trigger: 'axis',
-                            formatter : function (params) {
-                                var date = new Date(params.value[0]);
-                                return params.seriesName
-                                    + ' （'
-                                    + date.getFullYear() + '-'
-                                    + (date.getMonth() + 1) + '-'
-                                    + date.getDate() + ' '
-                                    + date.getHours() + ':'
-                                    + date.getMinutes()
-                                    +  '）<br/>'
-                                    + params.value[1] + ', '
-                                    + params.value[2];
-                            },
-                            axisPointer:{
-                                type : 'cross',
-                                lineStyle: {
-                                    type : 'dashed',
-                                    width : 1
-                                }
-                            }
+//                            axisPointer: {
+//                                type: 'cross',
+//                                lineStyle: {
+//                                    type: 'dashed',
+//                                    width: 1
+//                                }
+//                            }
                         },
-                        symbolSize: function (value){
-                            return Math.round(value[2]/10);
-                        },
-                        data: (function () {
-                            var d = [];
-                            var len = 0;
-//                            var now = new Date();
-//                            var value;
-                            const self=this;
-                            self.$axios({
-                                url:'/analysis/vote-result-edit',
-                                method:'post',
-                                params:{
-                                    id:parseInt(self.voteForm.id),
-                                    itemId:self.voteForm.itemId,
-                                    voteNum:self.voteForm.votenum,
-                                }
-                            })
-                                .then((res) => {
-                                    if (res != null && res.data.result){
-                                        self.$message('修改成功!');
-                                        self.getData();
-                                    }
-                                    else
-                                        self.$message.error("修改失败！");
-                                    self.$modal.hide('vote-modal');
-                                })
-                            while (len++ < 1000) {
-                                d.push([
-                                    new Date(2017, 12, 1, 0, Math.round(Math.random()*10000)),
-                                    (Math.random()*30).toFixed(2) - 0,
-                                    (Math.random()*100).toFixed(2) - 0
-                                ]);
-                            }
-                            return d;
-                        })()
+//                        symbolSize: function (value){
+//                            return Math.round(value[2]/10);
+//                        },
+
+                            data: (function () {
+//                                var m = [];
+//                                var len = 0;
+//                                while (len++ < 1500) {
+//                                    m.push([
+//                                        new Date(2014, 9, 1, 0, Math.round(Math.random() * 10000)),
+//                                        (Math.random() * 30).toFixed(2) - 0,
+////                                        (Math.random() * 100).toFixed(2) - 0
+//                                    ]);
+//                                }
+//                                return m;
+//                                console.log(d);
+                                return d;
+                            })()
+
                     }
+
                 ]
             })
         },
