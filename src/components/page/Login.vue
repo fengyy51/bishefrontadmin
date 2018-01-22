@@ -23,11 +23,11 @@
             <!--：model为绑定自定义属性model（v-bind:model="" ) v-model为数据双向绑定v-model是动态绑定值到value，然后监听input的input事件获取值后赋给dataA的一个过程。-->
             <el-form :model="regForm" :rules="regrules" ref="regForm" label-width="0px" class="demo-ruleForm">
                 <el-form-item prop="regusername">
-                    <el-input v-model="regForm.regusername" placeholder="username"></el-input>
+                    <el-input v-model="regForm.regusername" v-on:blur="isUsernameOk" placeholder="username"></el-input>
                 </el-form-item>
                 <el-form-item prop="regpassword">
                     <!--在 Vue 2.0 中，为自定义组件绑定原生事件必须使用 .native 修饰符： 当输入密码后监听回车事件-->
-                    <el-input type="password" placeholder="password" v-model="regForm.regpassword" @keyup.enter.native="submitReg('regForm')"></el-input>
+                    <el-input type="password" placeholder="password" v-model="regForm.regpassword"  @keyup.enter.native="submitReg('regForm')"></el-input>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitReg('regForm')">注册</el-button>
@@ -93,6 +93,35 @@ export default {
             })
     },
     methods: {
+        isUsernameOk(){
+            const self=this;
+            var userName = self.regForm.regusername;
+            console.log(userName);
+            if(userName!=''){
+                self.$axios({
+                    method: 'post',
+                    url: '/is-username-ok',
+                    data: {
+                        username: userName,
+                    }
+                })
+                //60为60s，localstorage过期后自动失效，本程序设置为1小时后自动失效，之后需要重新登录
+                    .then(function(res) {
+                        var code=res.code;
+                        if(code==200){
+                            var result=res.data.result;
+                            if(result==false){
+                                self.$message.error("用户名已被占用");
+                            }
+                        }else{
+                            console.log(res);
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
+            }
+        },
         ToRegister(){
             this.showRegister=true;
             this.showLogin=false;
