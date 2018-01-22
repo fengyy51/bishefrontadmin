@@ -20,7 +20,8 @@ var router = new Router({
                 //组件懒加载，resolve => require(['@/components/First'],resolve)  这个resolve会在你html上的main文件里面自动生成一个asyc属性，属性值就是对应js的文件位置，
                 // 里面会异步按需加载对应的那个组件的js文件，所以webpack的配置文件里的publicpath和chunckfilname很重要
                 component: resolve => require(['../components/page/Welcome.vue'], resolve)
-            }, {
+            },
+                {
                 path: '/notice',
                 component: resolve => require(['../components/page/Notice.vue'], resolve)
             }, {

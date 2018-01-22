@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
-        <div class="ms-title">宾王158管理系统</div>
-        <div class="ms-login">
+        <div class="ms-title">活动管理系统</div>
+        <div class="ms-login" v-show="showLogin">
             <!--：model为绑定自定义属性model（v-bind:model="" ) v-model为数据双向绑定v-model是动态绑定值到value，然后监听input的input事件获取值后赋给dataA的一个过程。-->
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
                 <el-form-item prop="username">
@@ -14,6 +14,27 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
+                <div class="register-btn">
+                    <span class="register-content" v-on:click="ToRegister">还没有账号？马上注册</span>
+                </div>
+            </el-form>
+        </div>
+        <div class="ms-login" v-show="showRegister">
+            <!--：model为绑定自定义属性model（v-bind:model="" ) v-model为数据双向绑定v-model是动态绑定值到value，然后监听input的input事件获取值后赋给dataA的一个过程。-->
+            <el-form :model="regForm" :rules="regrules" ref="regForm" label-width="0px" class="demo-ruleForm">
+                <el-form-item prop="regusername">
+                    <el-input v-model="regForm.regusername" placeholder="username"></el-input>
+                </el-form-item>
+                <el-form-item prop="regpassword">
+                    <!--在 Vue 2.0 中，为自定义组件绑定原生事件必须使用 .native 修饰符： 当输入密码后监听回车事件-->
+                    <el-input type="password" placeholder="password" v-model="regForm.regpassword" @keyup.enter.native="submitReg('regForm')"></el-input>
+                </el-form-item>
+                <div class="login-btn">
+                    <el-button type="primary" @click="submitReg('regForm')">注册</el-button>
+                </div>
+                <div class="register-btn">
+                    <span class="register-content" v-on:click="ToLogin">已有账号？马上登录</span>
+                </div>
             </el-form>
         </div>
     </div>
@@ -22,7 +43,13 @@
 export default {
     data: function() {
         return {
+            showLogin:true,
+            showRegister:false,
             ruleForm: {
+                username: '',
+                password: ''
+            },
+            regForm: {
                 username: '',
                 password: ''
             },
@@ -33,6 +60,18 @@ export default {
                     trigger: 'blur'
                 }],
                 password: [{
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                }],
+            },
+            regrules:{
+                regusername: [{
+                    required: true,
+                    message: '请输入用户名',
+                    trigger: 'blur'
+                }],
+                regpassword: [{
                     required: true,
                     message: '请输入密码',
                     trigger: 'blur'
@@ -54,6 +93,14 @@ export default {
             })
     },
     methods: {
+        ToRegister(){
+            this.showRegister=true;
+            this.showLogin=false;
+        },
+        ToLogin(){
+            this.showRegister=false;
+            this.showLogin=true;
+        },
         submitForm(formName) {
             const self = this;
 
@@ -66,7 +113,7 @@ export default {
                             method: 'post',
                             url: '/login',
                             data: {
-                                userName: userName,
+                                username: userName,
                                 password: password
                             }
                         })
@@ -78,6 +125,34 @@ export default {
                                 });
                                 self.$router.push('/home');
                             }
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
+                } else {
+//                    弹出错误，Element 注册了一个$message方法用于调用，Message 可以接收一个字符串作为参数，它会被显示为正文内容。设置type字段可以定义不同的状态//
+                    self.$message.error("输入有误");
+                    return false;
+                }
+            });
+        },
+        submitReg(formName) {
+            const self = this;
+            self.$refs[formName].validate((valid) => {
+                if (valid) {
+                    var userName = self.regForm.regusername;
+                    var password = self.regForm.regpassword;
+                    self.$axios({
+                        method: 'post',
+                        url: '/register',
+                        data: {
+                            username: userName,
+                            password: password
+                        }
+                    })
+                    //60为60s，localstorage过期后自动失效，本程序设置为1小时后自动失效，之后需要重新登录
+                        .then(function(res) {
+                           self.ToLogin();
                         })
                         .catch(function(error) {
                             console.log(error);
@@ -114,7 +189,7 @@ export default {
     left: 50%;
     top: 50%;
     width: 300px;
-    height: 160px;
+    height: 180px;
     margin: -150px 0 0 -190px;
     padding: 40px;
     border-radius: 5px;
@@ -128,5 +203,17 @@ export default {
 .login-btn button {
     width: 100%;
     height: 36px;
+}
+.register-btn{
+    margin-top: 15px;
+}
+.register-content{
+    color: #20a0ff;
+}
+span{
+    cursor: pointer;
+}
+span:hover{
+    color:#41b883;
 }
 </style>
