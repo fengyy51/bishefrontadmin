@@ -329,6 +329,7 @@ export default {
                             var id = this.$route.params.id
                             if (id != 0){
                                 var regItem=localStorage.getItem("regItem").split(',');
+                                //创建组件，装配到某dom节点中
                                 var RegList = Vue.extend({
                                     template: temstr,
                                     data(){
