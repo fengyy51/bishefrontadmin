@@ -99,12 +99,15 @@ export default {
             },
             getData() {
                 let self = this;
+                var wsCache = window.$wsCache;
+                var username=wsCache.get("username");
                 this.$axios({
                         url: '/notice/list',
                         method: 'get',
                         params: {
                             curPage: self.cur_page,
-                            pageSum: self.pageSum
+                            pageSum: self.pageSum,
+                            username:username,
                         }
                     })
                     .then((res) => {
