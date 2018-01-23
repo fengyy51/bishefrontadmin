@@ -159,6 +159,8 @@ export default {
             },
             onSubmit() {
                 const self = this;
+                var wsCache = window.$wsCache;
+                var username=wsCache.get("username");
                 self.$refs["form"].validate((valid) => {
                     if (valid) {
                         //添加
@@ -170,7 +172,8 @@ export default {
                                     method: 'post',
                                     data: {
                                         content: content,
-                                        pubDate: date
+                                        pubDate: date,
+                                        username:username
                                     }
                                 })
                                 .then((res) => {
