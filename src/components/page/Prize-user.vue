@@ -45,7 +45,7 @@
             <el-table-column label="是否使用" prop="isUse">
                 <template scope="scope">
                     <div v-if="scope.row.isUse == 0">
-                        <el-button type="success" @click="handleSign(scope.row.openId)" class="sign_button">去验证</el-button>
+                        <el-button type="success" @click="handleUse(scope.row.id)" class="sign_button">去验证</el-button>
                     </div>
                     <div v-else>
                         <el-tag type="gray" class="sign_tag">已使用</el-tag>
@@ -127,24 +127,23 @@
             searchHandle() {
                 this.getData();
             },
-            handleSign(openId) {
+            handleUse(id) {
                 const self = this;
                 self.loading = true;
                 self.$axios({
-                    url: '/act/do-sign',
+                    url: '/prize/do-use',
                     method: 'post',
                     params: {
-                        openId: openId,
-                        actId: self.actId
+                        id:id
                     }
                 })
                     .then((res) => {
                         self.loading = false;
                         if (res != null && res.data.result) {
-                            self.$message('签到成功!');
+                            self.$message('验证成功!');
                             self.getData();
                         } else
-                            self.$message.error("签到失败!请重试！");
+                            self.$message.error("验证失败!请重试！");
                     })
                     .catch(function(error) {
                         self.loading = false;

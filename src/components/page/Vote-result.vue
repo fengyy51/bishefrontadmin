@@ -141,6 +141,10 @@
                 if(self.search_form.item_id==''){
                     itemId=-1;
                 }
+                console.log(self.$route.params.itemId);
+                if(self.$route.params.itemId!=undefined){
+                    itemId=self.$route.params.itemId
+                }
                 self.$axios({
                     url: '/collect/vote-result',
                     method: 'get',

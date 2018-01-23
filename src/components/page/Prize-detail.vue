@@ -35,7 +35,7 @@
                     <i class="fa fa-stop" aria-hidden="true"></i>
                     停止上传
                 </el-button>
-                <el-button type="primary" @click="openMuban">奖项模板下载</el-button>
+                <el-button type="primary" @click="openMuban">奖品数据模板下载</el-button>
                 <span style="font-size: 13px;color:red">此处为上传奖项、奖品数据配置，请上传前将单元格格式设置好</span>
             </div>
         </div>

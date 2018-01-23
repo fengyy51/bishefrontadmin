@@ -71,6 +71,10 @@ var router = new Router({
                     path:'/vote-list/result/:id',
                     component:resolve=>require(['../components/page/Vote-result.vue'],resolve)
                 },
+                {
+                    path:'/vote-list/result/:id/:itemId',
+                    component:resolve=>require(['../components/page/Vote-result.vue'],resolve)
+                },
                 //发起抽奖
                 {
                     path: '/prize-launch/:id',

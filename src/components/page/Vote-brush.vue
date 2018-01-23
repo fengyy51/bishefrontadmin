@@ -59,24 +59,26 @@
             </el-table-column>
             <el-table-column prop="useragent" label="投票设备" sortable>
             </el-table-column>
-            <el-table-column label="操作">
-                <template scope="scope">
-                    <el-button size="small" type="success" @click="handleResult(scope.row.id)">查看投票结果</el-button>
-                </template>
-            </el-table-column>
+            <!--<el-table-column label="操作">-->
+                <!--<template scope="scope">-->
+                    <!--<el-button size="small" type="success" @click="handleResult(scope.row.id)">查看投票结果</el-button>-->
+                <!--</template>-->
+            <!--</el-table-column>-->
         </el-table>
         <div class="pagination" id="detailpagination"  style="display: none;" >
             <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
             </el-pagination>
         </div>
         <el-table :data="numtableData" border style="width: 100%;display: none;" id="numtable">
+            <el-table-column prop="voteId" label="投票活动序号" :formatter="formatter_voteId">
+            </el-table-column>
             <el-table-column prop="id" label="投票选择序号" sortable>
             </el-table-column>
             <el-table-column prop="num" label="时间区间内投票个数" :formatter="formatter_num"sortable>
             </el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
-                    <el-button size="small" type="success" @click="handleResult(scope.row.id)">查看投票结果</el-button>
+                    <el-button size="small" type="success" @click="handleResult(scope.row.voteId,scope.row.id)">投票结果修改</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -185,6 +187,9 @@
         methods: {
             formatter_ip(row,column){
                 return row.ip;
+            },
+            formatter_voteId(row,column){
+                return row.voteId;
             },
             formatter_num(row,column){
                 return row.num;
@@ -295,6 +300,9 @@
 
                 })
             },
+            handleResult(voteId,id){
+                this.$router.push("/vote-list/result/"+voteId+"/"+id);
+            }
         }
     }
 </script>

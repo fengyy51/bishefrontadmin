@@ -36,7 +36,7 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
-                    <el-button size="small" type="success" @click="handleVote(scope.row.id)">投票管理</el-button>
+                    <el-button size="small" type="success" @click="handleVote(scope.row.id)">发起投票</el-button>
                 </template>
             </el-table-column>
         </el-table>

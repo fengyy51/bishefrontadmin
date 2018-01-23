@@ -18,7 +18,7 @@
                 <el-menu-item index="/act-addinfo/0">
                     <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;&nbsp;自定义报名项
                 </el-menu-item>
-                <el-menu-item index="/item-list"><i class="fa fa-file-image-o" aria-hidden="true"></i>&nbsp;&nbsp;报名数据管理</el-menu-item>
+                <el-menu-item index="/item-list"><i class="fa fa-file-image-o" aria-hidden="true"></i>&nbsp;&nbsp;报名数据审核</el-menu-item>
                 <el-menu-item index="/vote-list"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;&nbsp;投票活动列表</el-menu-item>
             </el-submenu>
             <el-submenu index="2" >
