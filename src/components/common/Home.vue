@@ -6,6 +6,7 @@
             <!--低速进出动画-->
             <transition name="move" mode="out-in"><router-view></router-view></transition>
         </div>
+
     </div>
 </template>
 
