@@ -29,6 +29,46 @@
                 <el-button type="success" @click="export2Excel">导出</el-button>
                 <el-tag>共{{sum}}个用户</el-tag>
         </div>
+        <el-table :data="allData" border style="display: none;" v-loading.body="loading">
+            <el-table-column type="index" width="100" >
+            </el-table-column>
+            <el-table-column label="微信id" prop="openId">
+            </el-table-column>
+            <el-table-column label="验证码" prop="code">
+            </el-table-column>
+            <el-table-column label="报名信息" prop="regItem">
+            </el-table-column>
+            <el-table-column label="报名状态" prop="status">
+                <template scope="scope">
+                    <div v-if="scope.row.status == 0">
+                        已报名
+                    </div>
+                    <div v-else-if="scope.row.status==2">
+                        未支付
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column label="更改报名状态" >
+                <template scope="scope">
+                    <div v-if="scope.row.status == 2">
+                        <el-button type="success" @click="handleStatus(scope.row.openId)" class="status_button">已支付</el-button>
+                    </div>
+                    <div v-else>
+                        <el-tag type="gray" class="status_tag">已报名</el-tag>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column label="是否签到" prop="sign">
+                <template scope="scope">
+                    <div v-if="scope.row.sign == 0">
+                        <el-button type="success" @click="handleSign(scope.row.openId)" class="sign_button">去签到</el-button>
+                    </div>
+                    <div v-else>
+                        <el-tag type="gray" class="sign_tag">已签到</el-tag>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
         <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
             <el-table-column type="index" width="100" >
             </el-table-column>
@@ -100,6 +140,7 @@ export default {
                     code: '',
                 },
                 tableData: [],
+                allData:[],
                 pageSum: 10,
                 sum: 0,
                 cur_page: 1,
@@ -109,16 +150,17 @@ export default {
         },
         mounted() {
             this.getData();
+            this.getAllData();
         },
         methods: {
-//        导出excel
+//        导出excel 导出全部数据
             export2Excel() {
                 require.ensure([], () => {
                     const { export_json_to_excel } = require('../../excel/Export2Excel');
                     const { blob }=require('../../excel/Blob');
                     const tHeader = ['微信id','验证码','报名信息','报名状态','是否签到'];
                     const filterVal = ['openId','code','regItem','status','sign'];
-                    const list = this.tableData;
+                    const list = this.allData;
                     const data = this.formatJson(filterVal, list);
                     export_json_to_excel(tHeader, data, '列表excel');
                 })
@@ -153,8 +195,30 @@ export default {
                         }
                     })
             },
+            //获取导出的数据
+            getAllData(){
+                const self = this;
+                var wsCache = window.$wsCache;
+                var username=wsCache.get("username");
+                self.$axios({
+                    url: '/act/sign/list-all',
+                    method: 'get',
+                    params: {
+                        code: self.search_form.code,
+                        sign: self.search_form.sign,
+                        actId: self.actId
+                    }
+                })
+                    .then((res) => {
+                        if (res != null) {
+                            self.allData = res.data.list;
+                            self.sum = res.data.sum;
+                        }
+                    })
+            },
             searchHandle() {
                 this.getData();
+                this.getAllData();
             },
             handleSign(openId) {
                 const self = this;

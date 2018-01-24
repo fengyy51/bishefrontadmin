@@ -27,6 +27,32 @@
             <el-button type="success" @click="export2Excel">导出</el-button>
             <el-tag>共{{sum}}个用户</el-tag>
         </div>
+        <el-table :data="allData" border style="display: none" v-loading.body="loading">
+            <el-table-column type="index" width="100" sortable>
+            </el-table-column>
+            <el-table-column label="奖券序号" prop="id" sortable>
+            </el-table-column>
+            <el-table-column label="微信id" prop="openId">
+            </el-table-column>
+            <el-table-column label="验证码" prop="code">
+            </el-table-column>
+            <el-table-column label="奖项编号" prop="prizeId">
+            </el-table-column>
+            <el-table-column label="添加时间" prop="addtime" sortable>
+            </el-table-column>
+            <el-table-column label="修改时间" prop="modtime" sortable>
+            </el-table-column>
+            <el-table-column label="是否使用" prop="isUse">
+                <template scope="scope">
+                    <div v-if="scope.row.isUse == 0">
+                        <el-button type="success" @click="handleUse(scope.row.id)" class="sign_button">去验证</el-button>
+                    </div>
+                    <div v-else>
+                        <el-tag type="gray" class="sign_tag">已使用</el-tag>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
         <el-table :data="tableData" border style="width: 100%" v-loading.body="loading">
             <el-table-column type="index" width="100" sortable>
             </el-table-column>
@@ -71,6 +97,7 @@
                     code: '',
                 },
                 tableData: [],
+                allData:[],
                 pageSum: 10,
                 sum: 0,
                 cur_page: 1,
@@ -80,16 +107,17 @@
         },
         mounted() {
             this.getData();
+            this.getAllData();
         },
         methods: {
-//        导出excel
+//        导出全部数据excel
             export2Excel() {
                 require.ensure([], () => {
                     const { export_json_to_excel } = require('../../excel/Export2Excel');
                     const { blob }=require('../../excel/Blob');
                     const tHeader = ['奖券序号','微信id','验证码','奖项编号','添加时间','修改时间','是否使用'];
                     const filterVal = ['id','openId','code','prizeId','addtime','modtime','isUse'];
-                    const list = this.tableData;
+                    const list = this.allData;
                     const data = this.formatJson(filterVal, list);
                     export_json_to_excel(tHeader, data, '抽奖用户列表excel');
                 })
@@ -124,8 +152,30 @@
                         }
                     })
             },
+            getAllData(){
+                const self = this;
+                var wsCache = window.$wsCache;
+                var username=wsCache.get("username");
+                self.$axios({
+                    url: '/prize/list-user-all',
+                    method: 'get',
+                    params: {
+                        code: self.search_form.code,
+                        isUse: self.search_form.isUse,
+                        actId: self.actId
+                    }
+                })
+                    .then((res) => {
+                        if (res != null) {
+                            self.allData = res.data.list;
+                            console.log(self.allData);
+                            self.sum = res.data.sum;
+                        }
+                    })
+            },
             searchHandle() {
                 this.getData();
+                this.getAllData();
             },
             handleUse(id) {
                 const self = this;
