@@ -146,7 +146,8 @@
             </template>
         </el-table>
         <div class="pagination">
-            <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
+            <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                            :pageSize="pageSum" :page-sizes="[2,4,6,8,10,12,14]" layout="total,sizes, prev, pager, next, jumper"  :total="sum">
             </el-pagination>
         </div>
         <!-- 首屏上传模态框 -->
@@ -492,6 +493,10 @@ export default {
                         self.$message.error("修改失败！请确保序号对应");
                     self.$modal.hide('first-img-modal');
                 })
+        },
+        handleSizeChange(val) {
+            this.pageSum=val;
+            this.getData();
         },
         handleCurrentChange(val) {
             this.cur_page = val;

@@ -20,10 +20,13 @@
                 </template>
             </el-table-column>
         </el-table>
+
         <div class="pagination">
-            <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
+            <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                            :pageSize="pageSum" :page-sizes="[2,4,6,8,10,12,14]" layout="total,sizes, prev, pager, next, jumper"  :total="sum">
             </el-pagination>
         </div>
+
 
         <!-- 模态框  :pivotY为垂直距离百分比 -->
         <modal name="addinfo-modal" transition="pop-out" height="auto" :scrollable="true" :resizable="true" :pivotY="0.2">
@@ -153,6 +156,10 @@
             },
             formatter_options(row,column){
                 return row.options;
+            },
+            handleSizeChange(val) {
+                this.pageSum=val;
+                this.getData();
             },
             handleCurrentChange(val) {
                 this.cur_page = val;

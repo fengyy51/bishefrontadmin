@@ -104,7 +104,8 @@
             </el-table-column>
         </el-table>
         <div class="pagination">
-            <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
+            <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                            :pageSize="pageSum" :page-sizes="[2,4,6,8,10,12,14]" layout="total,sizes, prev, pager, next, jumper"  :total="sum">
             </el-pagination>
         </div>
     </div>
@@ -213,6 +214,9 @@
                     this.$router.push(url + "0");
                 else
                     this.$router.push(url + id);
+            },   handleSizeChange(val) {
+                this.pageSum=val;
+                this.getData();
             },
             handleCurrentChange(val) {
                 this.cur_page = val;

@@ -66,7 +66,8 @@
             <!--</el-table-column>-->
         </el-table>
         <div class="pagination" id="detailpagination"  style="display: none;" >
-            <el-pagination @current-change="handleCurrentChange" :pageSize="pageSum" layout="prev, pager, next" :total="sum">
+            <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                            :pageSize="pageSum" :page-sizes="[2,4,6,8,10,12,14]" layout="total,sizes, prev, pager, next, jumper"  :total="sum">
             </el-pagination>
         </div>
         <el-table :data="numtableData" border style="width: 100%;display: none;" id="numtable">
@@ -83,8 +84,9 @@
             </el-table-column>
         </el-table>
         <div class="pagination" id="numpagination"  style="display: none;" >
-            <el-pagination @current-change="handleCurrentChangeNum" :pageSize="numpageSum" layout="prev, pager, next" :total="numsum">
-            </el-pagination>
+            <el-pagination  @size-change="handleSizeChangeNum" @current-change="handleCurrentChangeNum"
+                             :pageSize="numpageSum" :page-sizes="[2,4,6,8,10,12,14]" layout="total,sizes, prev, pager, next, jumper"  :total="numsum">
+             </el-pagination>
         </div>
     </div>
 </template>
@@ -216,6 +218,12 @@
                 this.getNumData();
             },
             searchHandle() {
+                this.getData();
+            }, handleSizeChange(val) {
+                this.pageSum=val;
+                this.getData();
+            }, handleSizeChangeNum(val) {
+                this.numpageSum=val;
                 this.getData();
             },
             handleCurrentChange(val) {
