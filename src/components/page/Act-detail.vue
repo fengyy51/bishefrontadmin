@@ -56,6 +56,13 @@
                     <SingleImg :img="actForm.broadCastImg" :actionUrl="imgUploadUrl" v-on:imgChange="broadCastImgChange" v-on:handleChange="handleBroadCastImgChange"></SingleImg>
                 </el-form-item>
                 <br/>
+                <!--<div class="color-list">-->
+                    <!--<div-->
+                        <!--class="color-item"-->
+                        <!--v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color' }"-->
+                        <!--:key="color.text"-->
+                    <!--&gt;{{color.text}}</div>-->
+                <!--</div>-->
                 <el-form-item label="报名填写项" prop="reg">
                     <el-checkbox-group v-model="actForm.reg" >
                         <el-checkbox label="姓名" name="reg"></el-checkbox>
@@ -70,11 +77,13 @@
                         <el-checkbox label="身份证" name="reg"></el-checkbox>
                         <el-checkbox label="地址" name="reg"></el-checkbox>
                     </el-checkbox-group>
+                    <!--<el-button size="small" type="primary" id="regsort">排序</el-button>-->
                 </el-form-item>
                 <br/>
                 <el-form-item label="添加报名项" prop="reg_item" id="reg_item_content" >
                     <div id="reg_item"></div>
                     <el-button size="small" type="primary" @click="onAddInfo">管理自定义报名项</el-button>
+                    <!--<el-button size="small" type="primary" id="regitemsort">排序</el-button>-->
                 </el-form-item>
                 <br/>
                 <el-form-item label="活动详情">
@@ -92,6 +101,52 @@
                 </el-form-item>
             </el-form>
         </div>
+        <!--&lt;!&ndash; 模态框  :pivotY为垂直距离百分比 &ndash;&gt;-->
+        <!--<modal name="reg-modal" transition="pop-out" :height="380" :resizable="true" :pivotY="0.2">-->
+            <!--<div class="modal_close_btn">-->
+                <!--<i class="el-icon-close" @click="closeModal"></i>-->
+            <!--</div>-->
+            <!--<div class="modal-form">-->
+                <!--<el-form ref="regForm" label-width="80px" :rules="rules" :model="regForm">-->
+                    <!--<el-form-item label="用户名" prop="username">-->
+                        <!--<el-input v-model="ruleForm.username" placeholder="用户名"  ></el-input>-->
+                    <!--</el-form-item>-->
+                    <!--<el-form-item label="新的密码" prop="password">-->
+                        <!--<el-input type="password" placeholder="新的密码" v-model="ruleForm.password" ></el-input>-->
+                    <!--</el-form-item>-->
+                    <!--<el-form-item label="确认密码" prop="repassword">-->
+                        <!--<el-input type="password" placeholder="确认密码" v-model="ruleForm.repassword" ></el-input>-->
+                    <!--</el-form-item>-->
+                    <!--<el-form-item class="modal-btn-group">-->
+                        <!--<el-button type="primary" @click="onSubmit">提交</el-button>-->
+                        <!--<el-button @click="closeModal">取消</el-button>-->
+                    <!--</el-form-item>-->
+                <!--</el-form>-->
+            <!--</div>-->
+        <!--</modal>-->
+        <!--&lt;!&ndash; 模态框  :pivotY为垂直距离百分比 &ndash;&gt;-->
+        <!--<modal name="regitem-modal" transition="pop-out" :height="380" :resizable="true" :pivotY="0.2">-->
+            <!--<div class="modal_close_btn">-->
+                <!--<i class="el-icon-close" @click="closeModal"></i>-->
+            <!--</div>-->
+            <!--<div class="modal-form">-->
+                <!--<el-form ref="ruleForm" label-width="80px" :rules="rules" :model="ruleForm">-->
+                    <!--<el-form-item label="用户名" prop="username">-->
+                        <!--<el-input v-model="ruleForm.username" placeholder="用户名"  ></el-input>-->
+                    <!--</el-form-item>-->
+                    <!--<el-form-item label="新的密码" prop="password">-->
+                        <!--<el-input type="password" placeholder="新的密码" v-model="ruleForm.password" ></el-input>-->
+                    <!--</el-form-item>-->
+                    <!--<el-form-item label="确认密码" prop="repassword">-->
+                        <!--<el-input type="password" placeholder="确认密码" v-model="ruleForm.repassword" ></el-input>-->
+                    <!--</el-form-item>-->
+                    <!--<el-form-item class="modal-btn-group">-->
+                        <!--<el-button type="primary" @click="onSubmit">提交</el-button>-->
+                        <!--<el-button @click="closeModal">取消</el-button>-->
+                    <!--</el-form-item>-->
+                <!--</el-form>-->
+            <!--</div>-->
+        <!--</modal>-->
     </div>
 </template>
 <script>
@@ -118,6 +173,25 @@ Quill.register('modules/imageResize', ImageResize);
 export default {
     data() {
             return {
+//                colors: [{
+//                    text: "Aquamarine"
+//                }, {
+//                    text: "Hotpink"
+//                }, {
+//                    text: "Gold"
+//                }, {
+//                    text: "Crimson"
+//                }, {
+//                    text: "Blueviolet"
+//                }, {
+//                    text: "Lightblue"
+//                }, {
+//                    text: "Cornflowerblue"
+//                }, {
+//                    text: "Skyblue"
+//                }, {
+//                    text: "Burlywood"
+//                }],
                 id: '',
                 type_name: '',
                 tempBegin: '',
@@ -242,6 +316,14 @@ export default {
             if (id != 0){
                 this.getData();
             }
+//            this.$dragging.$on('dragged', ({ value }) => {
+//                console.log(value.item)
+//                console.log(value.list)
+//
+//            })
+//            this.$dragging.$on('dragend', () => {
+//
+//            })
 
         },
         computed: {
@@ -274,6 +356,9 @@ export default {
                 next()
         },
         methods: {
+            onUpdate: function (event) {
+                this.list.splice(event.newIndex, 0, this.list.splice(event.oldIndex, 1)[0])
+            },
             handleBlur(){
                 this.$refs.input.setCurrentValue(this.currentValue);
             },

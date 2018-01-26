@@ -7,8 +7,9 @@ import ElementUI from 'element-ui';
 import wsCache from 'web-storage-cache';
 import vmodal from 'vue-js-modal';
 import fileupload from 'vue-upload-component';
-import colorPicker from './util/vue-color-picker'
-import echarts from 'echarts'
+import colorPicker from './util/vue-color-picker';
+import echarts from 'echarts';
+import VueDND from 'awe-dnd'; //排序
 import 'element-ui/lib/theme-default/index.css';
 import "babel-polyfill";
 import './mock/index.js';
@@ -16,7 +17,7 @@ Vue.use(vmodal);
 Vue.use(ElementUI);
 Vue.use(fileupload);
 Vue.use(colorPicker);
-
+Vue.use(VueDND);
 
 Vue.prototype.$wsCache = new wsCache();
 window.$wsCache = new wsCache();

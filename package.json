@@ -1,7 +1,7 @@
 {
   "name": "manage-system",
   "version": "1.0.0",
-  "description": "基于Vue.js 2.x系列 + element-ui 内容管理系统解决方案",
+  "description": "基于Vue.js 2.x系列 + element-ui 管理系统解决方案",
   "author": "fyy",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
     "build:dll": "webpack --config build/webpack.dll.conf.js"
   },
   "dependencies": {
+    "awe-dnd": "^0.3.1",
     "axios": "^0.15.3",
     "babel-polyfill": "^6.23.0",
     "echarts": "^3.8.5",
