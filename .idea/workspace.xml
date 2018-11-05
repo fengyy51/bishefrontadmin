@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="85961ce3-0876-4c23-9046-0abdcbcf8b42" name="Default" comment="增加更改每页显示个数以及跳转到指定页码的功能">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/votelink.png" afterPath="$PROJECT_DIR$/static/img/votelink.png" />
+    <list default="true" id="85961ce3-0876-4c23-9046-0abdcbcf8b42" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/page/Gallery-handle.vue" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/page/Gallery-list.vue" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/page/Vote-Data-detail.vue" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/page/Vote-Data-list.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/common/Header.vue" afterPath="$PROJECT_DIR$/src/components/common/Header.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/common/Sidebar.vue" afterPath="$PROJECT_DIR$/src/components/common/Sidebar.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/page/Collect-list.vue" afterPath="$PROJECT_DIR$/src/components/page/Collect-list.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/router/index.js" afterPath="$PROJECT_DIR$/src/router/index.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -383,7 +382,7 @@
       <workItem from="1515035491513" duration="21758000" />
       <workItem from="1515979931062" duration="86440000" />
       <workItem from="1516929653125" duration="248000" />
-      <workItem from="1541419948663" duration="2624000" />
+      <workItem from="1541419948663" duration="2710000" />
     </task>
     <task id="LOCAL-00001" summary="导出用户数据到execl表">
       <created>1512010273530</created>
@@ -658,17 +657,23 @@
       <option name="project" value="LOCAL" />
       <updated>1516929869624</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="增加信息采集功能">
+      <created>1541424521035</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1541424521036</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="289882000" />
+    <option name="totallyTimeSpent" value="289968000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="182" y="43" width="1445" height="972" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21677327" sideWeight="0.7876106" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21677327" sideWeight="0.7876106" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -720,7 +725,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="抽奖param设置" />
     <MESSAGE value="抽奖活动列表，修改活动相关信息" />
     <MESSAGE value="兑奖码由管理系统决定" />
     <MESSAGE value="系统抽奖增加用户管理" />
@@ -745,7 +749,8 @@
     <MESSAGE value="活动和抽奖用户管理增加按照搜索结果或者全部数据导出为excel表功能" />
     <MESSAGE value="增加更改每页显示个数以及跳转到指定页码的功能" />
     <MESSAGE value="增加活动detail中排序（全部已注释，尚未完成）" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加活动detail中排序（全部已注释，尚未完成）" />
+    <MESSAGE value="增加信息采集功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加信息采集功能" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
