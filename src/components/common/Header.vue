@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <router-link to="/home">
-            <div class="logo">宾王158管理系统</div>
+            <div class="logo">活动管理系统</div>
         </router-link>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">

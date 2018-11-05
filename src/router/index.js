@@ -28,7 +28,18 @@ var router = new Router({
                 //当/home/shop-list匹配成功，将组件渲染在父组件的router-view中
                 path: '/shop-list',
                 component: resolve => require(['../components/page/Shop-list.vue'], resolve)
-            }, // //动态路由匹配，传的参数为id值
+            },
+                {
+                    //当/home/shop-list匹配成功，将组件渲染在父组件的router-view中
+                    path: '/vote-data-list',
+                    component: resolve => require(['../components/page/Vote-Data-list.vue'], resolve)
+                },
+                {
+                    //当/home/shop-list匹配成功，将组件渲染在父组件的router-view中
+                    path: '/vote-data-list/detail/:id',
+                    component: resolve => require(['../components/page/Vote-Data-detail.vue'], resolve)
+                },
+                // //动态路由匹配，传的参数为id值
                 {
                     path: '/act-list/detail/:id',
                     component: resolve => require(['../components/page/Act-detail.vue'], resolve)
@@ -104,6 +115,16 @@ var router = new Router({
                 {
                     path:'/user-behavior',
                     component:resolve=>require(['../components/page/User-behavior.vue'],resolve)
+                },
+            //    专题管理
+                {
+                    path:'/gallery',
+                    component:resolve=>require(['../components/page/Gallery-list.vue'],resolve)
+                },
+                //发起投票
+                {
+                    path: '/gallery-handle/:id',
+                    component: resolve => require(['../components/page/Gallery-handle.vue'], resolve)
                 },
             ],
         },

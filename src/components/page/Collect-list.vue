@@ -422,7 +422,7 @@ export default {
             this.$modal.show('vote-link-modal');
             setTimeout(function () {
                 var id=localStorage.getItem("id");
-                document.getElementById("vote-link").innerHTML='http://fbinwang.liuhongnan.com/goods/page/listWork.html?id='+id;
+                document.getElementById("vote-link").innerHTML='http://wechat.tuopinpin.com/goods/page/listWork.html?id='+id;
             },100)
         },
         closeVoteLinkModal(){
